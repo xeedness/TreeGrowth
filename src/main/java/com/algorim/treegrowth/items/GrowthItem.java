@@ -16,6 +16,7 @@ public class GrowthItem extends Item {
             maxStackSize = 1;
             setCreativeTab(CreativeTabs.tabMisc);
             setUnlocalizedName("growthItem");
+            setTextureName("treegrowth:growthitem");
         }
         
         @Override
