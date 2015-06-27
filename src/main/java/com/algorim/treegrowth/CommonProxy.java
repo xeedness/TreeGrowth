@@ -25,4 +25,8 @@ public class CommonProxy {
 		Chunk chunk = world.getChunkFromBlockCoords(posX, posZ);
 		mGrowthProcessor.processChunk(chunk);
 	}
+	
+	public void toggleAutoProcessing() {
+		mGrowthProcessor.toggleAutoProcessing();
+	}
 }

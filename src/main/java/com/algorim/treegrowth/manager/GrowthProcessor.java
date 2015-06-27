@@ -21,7 +21,7 @@ import net.minecraftforge.event.entity.player.BonemealEvent;
 
 public class GrowthProcessor {
 	private static GrowthProcessor instance;
-	
+	private boolean autoProcessingEnabled = true;
 	private GrowthDataProvider mGrowthDataProvider;
 	private GrowthProcessor() {
 		mGrowthDataProvider = GrowthDataProvider.getInstance();
@@ -30,6 +30,18 @@ public class GrowthProcessor {
 	static public GrowthProcessor getInstance() {
 		if(instance == null) instance = new GrowthProcessor();
 		return instance;
+	}
+	
+	public void toggleAutoProcessing() {
+		autoProcessingEnabled = !autoProcessingEnabled;
+		if(!autoProcessingEnabled)
+			System.out.println("Disabled autoProcessing");
+		else
+			System.out.println("Enabled autoProcessing");
+	}
+	
+	public boolean getAutoProcessingEnabled() {
+		return autoProcessingEnabled;
 	}
 	/**
 	 * Analyses a chunks tree and fertility structure and spawns new trees

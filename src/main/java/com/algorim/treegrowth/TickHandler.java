@@ -19,25 +19,27 @@ public class TickHandler implements ITickHandler {
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		if(GrowthDataProvider.getInstance().needsProcessing()) {	
-			long sTime = new Date().getTime();
-			long cTime = new Date().getTime();
-			GrowthDataProvider.getInstance().updateProcessing();
-			while(cTime - sTime < Constants.MAX_PROCESSING_TIME) {
-				Timer.startTimer("ChunkLookUp");
-				ChunkGrowthData data = GrowthDataProvider.getInstance().getNextProcessing();
-				Timer.stopTimer("ChunkLookUp");
-				if(data != null) {
-					Timer.startTimer("ChunkProcess");
-					GrowthProcessor.getInstance().processChunk(data.chunk);
-					Timer.stopTimer("ChunkProcess");
-					data.updateProcessing();
-				} else {
-					break;
+		if(GrowthProcessor.getInstance().getAutoProcessingEnabled()) {
+			if(GrowthDataProvider.getInstance().needsProcessing()) {	
+				long sTime = new Date().getTime();
+				long cTime = new Date().getTime();
+				GrowthDataProvider.getInstance().updateProcessing();
+				while(cTime - sTime < Constants.MAX_PROCESSING_TIME) {
+					Timer.startTimer("ChunkLookUp");
+					ChunkGrowthData data = GrowthDataProvider.getInstance().getNextProcessing();
+					Timer.stopTimer("ChunkLookUp");
+					if(data != null) {
+						Timer.startTimer("ChunkProcess");
+						GrowthProcessor.getInstance().processChunk(data.chunk);
+						Timer.stopTimer("ChunkProcess");
+						data.updateProcessing();
+					} else {
+						break;
+					}
+					cTime = new Date().getTime();
 				}
-				cTime = new Date().getTime();
+				
 			}
-			
 		}
 	}
 

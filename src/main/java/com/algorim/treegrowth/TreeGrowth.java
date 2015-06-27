@@ -3,6 +3,7 @@ package com.algorim.treegrowth;
 import java.util.ArrayList;
 
 import com.algorim.treegrowth.items.GrowthItem;
+import com.algorim.treegrowth.items.TreeGrowthConfigItem;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,7 @@ public class TreeGrowth
     
     
     GrowthItem growthItem;
+    TreeGrowthConfigItem configItem;
 
 	@SidedProxy(clientSide="com.algorim.treegrowth.ClientProxy",
 	            serverSide="com.algorim.treegrowth.ServerProxy")
@@ -35,11 +37,12 @@ public class TreeGrowth
     public void preInit(FMLPreInitializationEvent event)
     {
          growthItem = new GrowthItem(0);
-      
+         configItem = new TreeGrowthConfigItem(1);
 
          // The second parameter is an unique registry identifier (not the displayed name)
          // Please don't use genericItem.getUnlocalizedName(), or you will make Lex sad
          GameRegistry.registerItem(growthItem, "growthItem");
+         GameRegistry.registerItem(configItem, "configItem");
 
     }
         
