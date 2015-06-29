@@ -28,6 +28,12 @@ public class Common {
 	public static boolean isAir(int blockID) {
 		return blockID == 0;
 	}
+	public static boolean isAir(World world, int x, int y, int z) {
+		return world.getBlockId(x,y,z) == 0;
+	}
+	public static boolean isAir(Chunk chunk, int x, int y, int z) {
+		return getBlockIDAbs(chunk, x, y, z) == 0;
+	}
 	public static boolean isClear(int blockID) {
 		return 	blockID == 0 ||
 				blockID == Block.snow.blockID;
@@ -47,49 +53,77 @@ public class Common {
 				blockID == Block.grass.blockID;
 	}
 	
-	public static int getBlockID(Chunk chunk, int x, int y, int z) {
-		//TODO Add y boundary top
-		if(x < 0 || x > 15 || y < 0 || z < 0 || z > 15) {
-			//System.out.println("getBlockID: Parameter out of bounds."+x+" "+y+" "+z);
-			return chunk.worldObj.getBlockId((chunk.xPosition << 4)+x, y, (chunk.zPosition << 4)+z);
-		} else {
-			return chunk.getBlockID(x,y,z);
-		}
+//	public static int getBlockID(Chunk chunk, int x, int y, int z) {
+//		//TODO Add y boundary top
+//		if(x < 0 || x > 15 || y < 0 || z < 0 || z > 15) {
+//			//System.out.println("getBlockID: Parameter out of bounds."+x+" "+y+" "+z);
+//			return chunk.worldObj.getBlockId((chunk.xPosition << 4)+x, y, (chunk.zPosition << 4)+z);
+//		} else {
+//			return chunk.getBlockID(x,y,z);
+//		}
+//	}
+	public static int getBlockIDAbs(Chunk chunk, int x, int y, int z) {
+		if((chunk.xPosition << 4) <= x && (chunk.xPosition << 4)+16 > x &&
+				(chunk.zPosition << 4) <= z && (chunk.zPosition << 4)+16 > z)
+			return chunk.getBlockID(x & 15, y, z & 15);
+		else
+			return chunk.worldObj.getBlockId(x, y, z);
+	}
+	public static int getBlockMetadataAbs(Chunk chunk, int x, int y, int z) {
+		if((chunk.xPosition << 4) <= x && (chunk.xPosition << 4)+16 > x &&
+				(chunk.zPosition << 4) <= z && (chunk.zPosition << 4)+16 > z)
+			return chunk.getBlockMetadata(x & 15, y, z & 15);
+		else
+			return chunk.worldObj.getBlockMetadata(x,y,z);
 	}
 	
-	public static int getBlockMetadata(Chunk chunk, int x, int y, int z) {
-		//TODO Add y boundary top
-		if(x < 0 || x > 15 || y < 0 || z < 0 || z > 15) {
-			//System.out.println("getBlockID: Parameter out of bounds."+x+" "+y+" "+z);
-			return chunk.worldObj.getBlockMetadata((chunk.xPosition << 4)+x, y, (chunk.zPosition << 4)+z);
-		} else {
-			return chunk.getBlockMetadata(x,y,z);
-		}
-	}
-	public static int getDirtLevel(Chunk chunk, int x, int z) {
-		int y = chunk.getHeightValue(x, z);
-		while(!isDirt(chunk, x, y, z)) {
-			if(y == 1) throw new IllegalArgumentException("No DirtLevel"); 
-			y--;
-		}
-		if(!canBreath(getBlockID(chunk, x, y+1, z))) throw new IllegalArgumentException("No Air Above DirtLevel");
-		return y;
-		
-	}
+//	public static int getBlockMetadata(Chunk chunk, int x, int y, int z) {
+//		//TODO Add y boundary top
+//		if(x < 0 || x > 15 || y < 0 || z < 0 || z > 15) {
+//			//System.out.println("getBlockID: Parameter out of bounds."+x+" "+y+" "+z);
+//			return chunk.worldObj.getBlockMetadata((chunk.xPosition << 4)+x, y, (chunk.zPosition << 4)+z);
+//		} else {
+//			return chunk.getBlockMetadata(x,y,z);
+//		}
+//	}
+//	public static int getDirtLevel(Chunk chunk, int x, int z) {
+//		int y = chunk.getHeightValue(x, z);
+//		while(!isDirt(chunk, x, y, z)) {
+//			if(y == 1) throw new IllegalArgumentException("No DirtLevel"); 
+//			y--;
+//		}
+//		if(!canBreath(getBlockID(chunk, x, y+1, z))) throw new IllegalArgumentException("No Air Above DirtLevel");
+//		return y;
+//		
+//	}
 	
 	public static boolean isWoodLog(Chunk chunk, int x, int y, int z) {
 		//System.out.println("isWoodLog: "+x+" "+y+" "+z);
-		return GrowthDataProvider.getInstance().isWood(getBlockID(chunk, x, y, z));
+		return GrowthDataProvider.getInstance().isWood(getBlockIDAbs(chunk, x, y, z));
+	}
+	public static boolean isWoodLog(World world, int x, int y, int z) {
+		//System.out.println("isWoodLog: "+x+" "+y+" "+z);
+		return GrowthDataProvider.getInstance().isWood(world.getBlockId(x, y, z));
 	}
 	
 	public static boolean isLeave(Chunk chunk, int x, int y, int z) {
 		//System.out.println("isLeave: "+x+" "+y+" "+z);
-		return GrowthDataProvider.getInstance().isLeave(getBlockID(chunk, x, y, z));
+		return GrowthDataProvider.getInstance().isLeave(getBlockIDAbs(chunk, x, y, z));
+	}
+	public static boolean isLeave(World world, int x, int y, int z) {
+		//System.out.println("isWoodLog: "+x+" "+y+" "+z);
+		return GrowthDataProvider.getInstance().isLeave(world.getBlockId(x, y, z));
 	}
 	public static boolean isDirt(Chunk chunk, int x, int y, int z) {
 		//System.out.println("isDirt: "+x+" "+y+" "+z);
-		return  Block.dirt.blockID == getBlockID(chunk, x, y, z) ||
-				Block.grass.blockID == getBlockID(chunk, x, y, z);
+		return  Block.dirt.blockID == getBlockIDAbs(chunk, x, y, z) ||
+				Block.grass.blockID == getBlockIDAbs(chunk, x, y, z);
+	}
+	
+	public static boolean isDirt(World world, int x, int y, int z) {
+		//System.out.println("isDirt: "+x+" "+y+" "+z);
+		return  Block.dirt.blockID == world.getBlockId(x, y, z) ||
+				Block.grass.blockID == world.getBlockId(x, y, z);
 	}
 	//TODO Lianen?
 	public static boolean isTreePart(World world, int x, int y, int z) {

@@ -53,10 +53,10 @@ public class GrowthDataProvider {
 		return treeConfig.isLeaves(blockID);
 	}
 	public TreeData getTreeData(Chunk chunk, Tree tree, Coord3i wood, Coord3i leaves) {
-		int woodID = Common.getBlockID(chunk, wood.x, wood.y, wood.z);
-		int leafID = Common.getBlockID(chunk, leaves.x, leaves.y, leaves.z);
-		int woodMeta = Common.getBlockMetadata(chunk,wood.x, wood.y, wood.z);
-		int leafMeta = Common.getBlockMetadata(chunk,leaves.x, leaves.y, leaves.z);
+		int woodID = Common.getBlockIDAbs(chunk, wood.x, wood.y, wood.z);
+		int leafID = Common.getBlockIDAbs(chunk, leaves.x, leaves.y, leaves.z);
+		int woodMeta = Common.getBlockMetadataAbs(chunk,wood.x, wood.y, wood.z);
+		int leafMeta = Common.getBlockMetadataAbs(chunk,leaves.x, leaves.y, leaves.z);
 		Block leafBlock = Block.blocksList[leafID];
 		Block woodBlock = Block.blocksList[woodID];
 		
@@ -89,7 +89,7 @@ public class GrowthDataProvider {
 			}
 		}
 		if(treeData == null)
-			Common.log("GrowthData","Could not identify tree.",  tree.getAbsCoord1(), tree.getAbsCoord2());
+			Common.log("GrowthData","Could not identify tree.",  tree.getCoord1(), tree.getCoord2());
 		return treeData;
 	}
 

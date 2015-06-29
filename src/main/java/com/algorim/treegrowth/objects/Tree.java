@@ -1,19 +1,19 @@
 package com.algorim.treegrowth.objects;
 
 import com.algorim.treegrowth.Constants;
-import com.algorim.treegrowth.manager.TreeDetector;
+import com.algorim.treegrowth.treedetection.TreeDetector;
 
 import net.minecraft.world.chunk.Chunk;
 
 public class Tree {
 	public Coord3i c1, c2;
-	private int woodID, leaveID;
+	//private int woodID, leaveID;
 	private Chunk chunk;
 	public Tree(Chunk chunk, int x1, int x2, int y1, int y2, int z1, int z2, int woodID, int leaveID) {
 		c1 = new Coord3i(x1,y1,z1);
 		c2 = new Coord3i(x2,y2,z2);
-		this.woodID = woodID;
-		this.leaveID = leaveID;
+//		this.woodID = woodID;
+//		this.leaveID = leaveID;
 		this.chunk = chunk;
 	}
 	
@@ -25,26 +25,26 @@ public class Tree {
 	
 	public Tree(int x, int y, int z) {
 		c1 = new Coord3i(x,y,z);
-		c2 = new Coord3i(-1,-1,-1);
+		c2 = new Coord3i(x,y,z);
 	}
 	
 	
 	
-	public int getLeaveID() {
-		return leaveID;
-	}
-
-	public void setLeaveID(int leaveID) {
-		this.leaveID = leaveID;
-	}
-	
-	public int getWoodID() {
-		return woodID;
-	}
-
-	public void setWoodID(int woodID) {
-		this.woodID = woodID;
-	}
+//	public int getLeaveID() {
+//		return leaveID;
+//	}
+//
+//	public void setLeaveID(int leaveID) {
+//		this.leaveID = leaveID;
+//	}
+//	
+//	public int getWoodID() {
+//		return woodID;
+//	}
+//
+//	public void setWoodID(int woodID) {
+//		this.woodID = woodID;
+//	}
 	
 	public Coord3i getPosition() {
 		return getCoord1();
@@ -89,21 +89,21 @@ public class Tree {
 				c2.equals(tree.getCoord2());
 	}
 	
-	public Coord3i getAbsCoord1() {
-		return new Coord3i((chunk.xPosition << 4) + c1.x,
-				c1.y,
-				(chunk.zPosition << 4) + c1.z);
-	}
-	public Coord3i getAbsCoord2() {
-		return new Coord3i((chunk.xPosition << 4) + c2.x,
-				c2.y,
-				(chunk.zPosition << 4) + c2.z);
-	}
+//	public Coord3i getAbsCoord1() {
+//		return new Coord3i((chunk.xPosition << 4) + c1.x,
+//				c1.y,
+//				(chunk.zPosition << 4) + c1.z);
+//	}
+//	public Coord3i getAbsCoord2() {
+//		return new Coord3i((chunk.xPosition << 4) + c2.x,
+//				c2.y,
+//				(chunk.zPosition << 4) + c2.z);
+//	}
 	public String toString() {
 		//return c1.x+":"+c1.y+":"+c1.z+" "+c2.x+":"+c2.y+":"+c2.z+" w"+woodID+" l"+leaveID;
-		Coord3i ac1 = getAbsCoord1();
-		Coord3i ac2 = getAbsCoord2();
-		return ac1.x+":"+ac1.y+":"+ac1.z+" "+ac2.x+":"+ac2.y+":"+ac2.z+" w"+woodID+" l"+leaveID;
+		Coord3i ac1 = getCoord1();
+		Coord3i ac2 = getCoord2();
+		return ac1.x+":"+ac1.y+":"+ac1.z+" "+ac2.x+":"+ac2.y+":"+ac2.z;
 	}
 	
 	public int getSpaceRequirement() {

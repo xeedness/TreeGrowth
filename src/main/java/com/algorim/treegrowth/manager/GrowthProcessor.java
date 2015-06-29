@@ -8,6 +8,7 @@ import com.algorim.treegrowth.Constants;
 import com.algorim.treegrowth.objects.Coord3i;
 import com.algorim.treegrowth.objects.Tree;
 import com.algorim.treegrowth.objects.TreeData;
+import com.algorim.treegrowth.treedetection.TreeDetector;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -21,7 +22,7 @@ import net.minecraftforge.event.entity.player.BonemealEvent;
 
 public class GrowthProcessor {
 	private static GrowthProcessor instance;
-	private boolean autoProcessingEnabled = true;
+	private boolean autoProcessingEnabled = false;
 	private GrowthDataProvider mGrowthDataProvider;
 	private GrowthProcessor() {
 		mGrowthDataProvider = GrowthDataProvider.getInstance();
@@ -86,7 +87,7 @@ public class GrowthProcessor {
 					}
 				}				
 			} else {
-				Common.log("GrowthProcessor","Tree not valid.", tree.getAbsCoord1(), tree.getAbsCoord2());
+				Common.log("GrowthProcessor","Tree not valid.", tree.getCoord1(), tree.getCoord2());
 			}
 		}
 		

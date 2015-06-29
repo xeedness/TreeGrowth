@@ -41,10 +41,10 @@ public class TreeProcessor {
 		mTree = tree;
 		mWorld = chunk.worldObj;
 		
-		start = new Coord2i(getWorldX(tree.c1.x)-(tree.getGrowthDimension()-tree.getSize())/2,
-				getWorldZ(tree.c1.z)-(tree.getGrowthDimension()-tree.getSize())/2);
-		end = new Coord2i(getWorldX(tree.c2.x)+(tree.getGrowthDimension()-tree.getSize())/2,
-				getWorldZ(tree.c2.z)+(tree.getGrowthDimension()-tree.getSize())/2);
+		start = new Coord2i(tree.c1.x-(tree.getGrowthDimension()-tree.getSize())/2,
+				tree.c1.z-(tree.getGrowthDimension()-tree.getSize())/2);
+		end = new Coord2i(tree.c2.x+(tree.getGrowthDimension()-tree.getSize())/2,
+				tree.c2.z+(tree.getGrowthDimension()-tree.getSize())/2);
 		
 		mGroundHeight = new int[tree.getGrowthDimension()+RATING_RADIUS*2][tree.getGrowthDimension()+RATING_RADIUS*2];
 		mGroundType = new int[tree.getGrowthDimension()+RATING_RADIUS*2][tree.getGrowthDimension()+RATING_RADIUS*2];
