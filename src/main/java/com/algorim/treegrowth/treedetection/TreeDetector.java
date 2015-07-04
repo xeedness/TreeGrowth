@@ -2,12 +2,12 @@ package com.algorim.treegrowth.treedetection;
 
 import java.util.ArrayList;
 
-import com.algorim.treegrowth.Common;
-import com.algorim.treegrowth.Constants;
-import com.algorim.treegrowth.Timer;
+import com.algorim.treegrowth.config.Constants;
 import com.algorim.treegrowth.manager.GrowthDataProvider;
-import com.algorim.treegrowth.objects.Tree;
-import com.algorim.treegrowth.objects.Coord2i;
+import com.algorim.treegrowth.utilities.Common;
+import com.algorim.treegrowth.utilities.Coord2i;
+import com.algorim.treegrowth.utilities.Timer;
+import com.algorim.treegrowth.utilities.Tree;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
@@ -65,7 +65,7 @@ public class TreeDetector {
 					if(Common.isWoodLog(chunk, x, y-depth, z)) {
 						for(ITreeStencil stencil : stencils) {
 							if(stencil.topFits(chunk, x, y-depth, z)) {
-								Tree tree = new Tree(x, y-depth, z);
+								Tree tree = new Tree(chunk, stencil, x, y-depth, z);
 								stencil.inflate(chunk, tree);
 								if(stencil.bottomFits(chunk, tree.c1.x, tree.c1.y, tree.c1.z) && stencil.trunkFits(chunk, tree)) {
 									//Check if the list already contains the tree. Add otherwise

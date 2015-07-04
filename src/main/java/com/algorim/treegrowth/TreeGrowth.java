@@ -2,6 +2,7 @@ package com.algorim.treegrowth;
 
 import java.util.ArrayList;
 
+import com.algorim.treegrowth.events.TickHandler;
 import com.algorim.treegrowth.items.GrowthItem;
 import com.algorim.treegrowth.items.TreeGrowthConfigItem;
 
@@ -26,8 +27,8 @@ public class TreeGrowth
     public static final String VERSION = "0.0.0";
     
     
-    GrowthItem growthItem;
-    TreeGrowthConfigItem configItem;
+    private GrowthItem growthItem;
+    private TreeGrowthConfigItem configItem;
 
 	@SidedProxy(clientSide="com.algorim.treegrowth.ClientProxy",
 	            serverSide="com.algorim.treegrowth.ServerProxy")
@@ -36,14 +37,14 @@ public class TreeGrowth
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-         growthItem = new GrowthItem(0);
-         configItem = new TreeGrowthConfigItem(1);
+		proxy.preInit(event);
+		//TODO Ids?
+		growthItem = new GrowthItem(0);
+		configItem = new TreeGrowthConfigItem(1);
 
-         // The second parameter is an unique registry identifier (not the displayed name)
-         // Please don't use genericItem.getUnlocalizedName(), or you will make Lex sad
-         GameRegistry.registerItem(growthItem, "growthItem");
-         GameRegistry.registerItem(configItem, "configItem");
-
+		GameRegistry.registerItem(growthItem, "growthItem");
+		GameRegistry.registerItem(configItem, "configItem");
+         
     }
         
     @EventHandler

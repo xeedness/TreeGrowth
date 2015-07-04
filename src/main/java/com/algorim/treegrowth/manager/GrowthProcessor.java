@@ -3,12 +3,12 @@ package com.algorim.treegrowth.manager;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.algorim.treegrowth.Common;
-import com.algorim.treegrowth.Constants;
-import com.algorim.treegrowth.objects.Coord3i;
-import com.algorim.treegrowth.objects.Tree;
-import com.algorim.treegrowth.objects.TreeData;
+import com.algorim.treegrowth.config.Constants;
 import com.algorim.treegrowth.treedetection.TreeDetector;
+import com.algorim.treegrowth.utilities.Common;
+import com.algorim.treegrowth.utilities.Coord3i;
+import com.algorim.treegrowth.utilities.Tree;
+import com.algorim.treegrowth.utilities.TreeData;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -20,9 +20,14 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 
+/**
+ * Main processing class. It it used, when a chunk needs to be processed.
+ * 
+ * @author xeedness
+ *
+ */
 public class GrowthProcessor {
 	private static GrowthProcessor instance;
-	private boolean autoProcessingEnabled = false;
 	private GrowthDataProvider mGrowthDataProvider;
 	private GrowthProcessor() {
 		mGrowthDataProvider = GrowthDataProvider.getInstance();
@@ -33,17 +38,17 @@ public class GrowthProcessor {
 		return instance;
 	}
 	
+	/**
+	 * Enables or disables the automatic processing
+	 */
 	public void toggleAutoProcessing() {
-		autoProcessingEnabled = !autoProcessingEnabled;
-		if(!autoProcessingEnabled)
+		Constants.AUTO_PROCESSING_ENABLED= !Constants.AUTO_PROCESSING_ENABLED;
+		if(!Constants.AUTO_PROCESSING_ENABLED)
 			System.out.println("Disabled autoProcessing");
 		else
 			System.out.println("Enabled autoProcessing");
 	}
 	
-	public boolean getAutoProcessingEnabled() {
-		return autoProcessingEnabled;
-	}
 	/**
 	 * Analyses a chunks tree and fertility structure and spawns new trees
 	 * 
@@ -93,28 +98,4 @@ public class GrowthProcessor {
 		
 		return true;
 	}
-	
-	
-	private void spawnSapling(Chunk chunk, Coord3i loc, ItemStack sapling) {
-		System.out.println("Spawning new sapling ("+sapling.itemID+","+sapling.getItemDamage()+")"+""
-				+ " at ("+loc+")");
-		chunk.setBlockIDWithMetadata(loc.x, loc.y, loc.z, sapling.itemID, sapling.getItemDamage());
-	}
-	
-	
-	String getBlockName(int blockID) {
-		for(Block block : Block.blocksList) {
-			if(block == null) continue;
-			if(blockID == block.blockID) {
-				return block.getUnlocalizedName();
-			}
-		}
-		return "Not Found";
-	}
-	
-
-
-	
-	
-	
 }

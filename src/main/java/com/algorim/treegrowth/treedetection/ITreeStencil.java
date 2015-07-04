@@ -1,6 +1,6 @@
 package com.algorim.treegrowth.treedetection;
 
-import com.algorim.treegrowth.objects.Tree;
+import com.algorim.treegrowth.utilities.Tree;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

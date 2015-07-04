@@ -1,12 +1,20 @@
-package com.algorim.treegrowth.objects;
+package com.algorim.treegrowth.utilities;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 
+/**
+ * This class represents a tree type. For example a birch. 
+ * It contains its identification and growth characteristics.
+ * 
+ * @author xeedness
+ *
+ */
 public class TreeData {
 	public transient static final int TYPE_BASIC = 0;
 	public transient static final int TYPE_ROUND = 1;
 	
+	private String name;
 	private int type;
 	private int dim;
 	private int woodID;
@@ -18,7 +26,8 @@ public class TreeData {
 	private float fertility;
 	
 	public TreeData() {};
-	public TreeData(int type, int dim, int woodID, int woodMeta, int leafID, int leafMeta, int saplingID, int saplingMeta, float fertility) {
+	public TreeData(String name, int type, int dim, int woodID, int woodMeta, int leafID, int leafMeta, int saplingID, int saplingMeta, float fertility) {
+		this.name = name;
 		this.type = type;
 		this.dim = dim;
 		this.woodID = woodID;
@@ -36,7 +45,9 @@ public class TreeData {
 				this.leafMeta == leafMeta &&
 				this.dim == dim;
 	}
-	
+	public String getName() {
+		return name;
+	}
 	public int getType() {
 		return type;
 	}

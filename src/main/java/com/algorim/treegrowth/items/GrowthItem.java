@@ -1,6 +1,5 @@
 package com.algorim.treegrowth.items;
 
-//@NetworkMod(clientSideRequired=true, serverSideRequired=false) //Used in 1.6.4 and before
 import com.algorim.treegrowth.TreeGrowth;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -9,6 +8,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+/**
+ * Item that processes a chunk, when used.
+ * 
+ * @author xeedness
+ *
+ */
 public class GrowthItem extends Item {
 
         public GrowthItem(int arg0) {

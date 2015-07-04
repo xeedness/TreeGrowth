@@ -1,4 +1,4 @@
-package com.algorim.treegrowth;
+package com.algorim.treegrowth.events;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -22,8 +22,8 @@ import net.minecraftforge.event.world.ChunkWatchEvent;
 public class ChunkEventHandler {
 	GrowthDataProvider mGrowthDataProvider;
 	GrowthProcessor mGrowthProcessor;
-	//int[] loaded;
-	ChunkEventHandler(GrowthDataProvider growthDataProvider, GrowthProcessor growthProcessor) {
+
+	public ChunkEventHandler(GrowthDataProvider growthDataProvider, GrowthProcessor growthProcessor) {
 		this.mGrowthDataProvider = growthDataProvider;
 		this.mGrowthProcessor = growthProcessor;
 	}

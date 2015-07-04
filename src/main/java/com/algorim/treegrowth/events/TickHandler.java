@@ -1,11 +1,13 @@
-package com.algorim.treegrowth;
+package com.algorim.treegrowth.events;
 
 import java.util.Date;
 import java.util.EnumSet;
 
+import com.algorim.treegrowth.config.Constants;
 import com.algorim.treegrowth.manager.ChunkGrowthData;
 import com.algorim.treegrowth.manager.GrowthDataProvider;
 import com.algorim.treegrowth.manager.GrowthProcessor;
+import com.algorim.treegrowth.utilities.Timer;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -19,7 +21,7 @@ public class TickHandler implements ITickHandler {
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		if(GrowthProcessor.getInstance().getAutoProcessingEnabled()) {
+		if(Constants.AUTO_PROCESSING_ENABLED) {
 			if(GrowthDataProvider.getInstance().needsProcessing()) {	
 				long sTime = new Date().getTime();
 				long cTime = new Date().getTime();

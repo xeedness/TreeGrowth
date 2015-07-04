@@ -1,4 +1,4 @@
-package com.algorim.treegrowth;
+package com.algorim.treegrowth.config;
 
 public class Constants {
 	
@@ -20,7 +20,7 @@ public class Constants {
 	//The update schedule of a chunk in m*s*ms
 	public static long CHUNK_UPDATE_TIME = 1*5*1000;
 	
-	
+	public static boolean AUTO_PROCESSING_ENABLED = true; 
 //	//Real Values
 //	public static int MAX_PROCESSING_TIME = 10;
 //	

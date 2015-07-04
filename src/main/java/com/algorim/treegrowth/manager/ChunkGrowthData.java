@@ -3,11 +3,16 @@ package com.algorim.treegrowth.manager;
 import java.util.ListIterator;
 import java.util.TreeMap;
 
-import com.algorim.treegrowth.Constants;
+import com.algorim.treegrowth.config.Constants;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+/**
+ * This class provides info of the processing history of a chunk
+ * 
+ * @author xeedness
+ */
 public class ChunkGrowthData {
 	
 	public static final int SIZE = 8;
@@ -19,6 +24,9 @@ public class ChunkGrowthData {
 	public int id;
 	public Chunk chunk;
 	
+	/**
+	 * @return true, when time since last processed > CHUNK_UPDATE_TIME
+	 */
 	public boolean needsProcessing() {
 		//if(true) return false;
 		if(chunk == null) return false;
@@ -35,6 +43,9 @@ public class ChunkGrowthData {
 			return (total-last_processed)*Constants.TICK_TIME > Constants.CHUNK_UPDATE_TIME;
 		}
 	}
+	/**
+	 * Resets processing time
+	 */
 	public void updateProcessing() {
 		processed++;
 		last_processed = chunk.worldObj.getTotalWorldTime();

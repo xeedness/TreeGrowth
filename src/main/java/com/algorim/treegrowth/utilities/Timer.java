@@ -1,4 +1,4 @@
-package com.algorim.treegrowth;
+package com.algorim.treegrowth.utilities;
 
 import java.util.Date;
 import java.util.TreeMap;

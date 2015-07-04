@@ -8,6 +8,12 @@ import net.minecraft.world.World;
 
 import com.algorim.treegrowth.TreeGrowth;
 
+/**
+ * Item that enabled or disables automatic chunk processing
+ * 
+ * @author xeedness
+ *
+ */
 public class TreeGrowthConfigItem extends Item {
 
     public TreeGrowthConfigItem(int arg0) {

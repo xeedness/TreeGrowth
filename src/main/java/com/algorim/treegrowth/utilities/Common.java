@@ -1,4 +1,4 @@
-package com.algorim.treegrowth;
+package com.algorim.treegrowth.utilities;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.algorim.treegrowth.manager.GrowthDataProvider;
-import com.algorim.treegrowth.objects.Coord3i;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.Vec3;
@@ -53,15 +52,6 @@ public class Common {
 				blockID == Block.grass.blockID;
 	}
 	
-//	public static int getBlockID(Chunk chunk, int x, int y, int z) {
-//		//TODO Add y boundary top
-//		if(x < 0 || x > 15 || y < 0 || z < 0 || z > 15) {
-//			//System.out.println("getBlockID: Parameter out of bounds."+x+" "+y+" "+z);
-//			return chunk.worldObj.getBlockId((chunk.xPosition << 4)+x, y, (chunk.zPosition << 4)+z);
-//		} else {
-//			return chunk.getBlockID(x,y,z);
-//		}
-//	}
 	public static int getBlockIDAbs(Chunk chunk, int x, int y, int z) {
 		if((chunk.xPosition << 4) <= x && (chunk.xPosition << 4)+16 > x &&
 				(chunk.zPosition << 4) <= z && (chunk.zPosition << 4)+16 > z)
@@ -77,25 +67,6 @@ public class Common {
 			return chunk.worldObj.getBlockMetadata(x,y,z);
 	}
 	
-//	public static int getBlockMetadata(Chunk chunk, int x, int y, int z) {
-//		//TODO Add y boundary top
-//		if(x < 0 || x > 15 || y < 0 || z < 0 || z > 15) {
-//			//System.out.println("getBlockID: Parameter out of bounds."+x+" "+y+" "+z);
-//			return chunk.worldObj.getBlockMetadata((chunk.xPosition << 4)+x, y, (chunk.zPosition << 4)+z);
-//		} else {
-//			return chunk.getBlockMetadata(x,y,z);
-//		}
-//	}
-//	public static int getDirtLevel(Chunk chunk, int x, int z) {
-//		int y = chunk.getHeightValue(x, z);
-//		while(!isDirt(chunk, x, y, z)) {
-//			if(y == 1) throw new IllegalArgumentException("No DirtLevel"); 
-//			y--;
-//		}
-//		if(!canBreath(getBlockID(chunk, x, y+1, z))) throw new IllegalArgumentException("No Air Above DirtLevel");
-//		return y;
-//		
-//	}
 	
 	public static boolean isWoodLog(Chunk chunk, int x, int y, int z) {
 		//System.out.println("isWoodLog: "+x+" "+y+" "+z);

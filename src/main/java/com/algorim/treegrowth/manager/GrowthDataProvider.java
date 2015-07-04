@@ -7,23 +7,30 @@ import java.util.ListIterator;
 import java.util.Random;
 import java.util.TreeMap;
 
-import com.algorim.treegrowth.Common;
-import com.algorim.treegrowth.Constants;
-import com.algorim.treegrowth.objects.Coord3i;
-import com.algorim.treegrowth.objects.Tree;
-import com.algorim.treegrowth.objects.TreeData;
+import com.algorim.treegrowth.config.Constants;
+import com.algorim.treegrowth.config.TreeConfiguration;
+import com.algorim.treegrowth.utilities.Common;
+import com.algorim.treegrowth.utilities.Coord3i;
+import com.algorim.treegrowth.utilities.Tree;
+import com.algorim.treegrowth.utilities.TreeData;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+/**
+ * This class holds the chunk infos. 
+ * 
+ * @author xeedness
+ *
+ */
 public class GrowthDataProvider {
 	
 	private static GrowthDataProvider instance; 
 	
 	TreeMap<Integer, TreeMap<Integer, ChunkGrowthData>> mChunkGrowthDataMap;
-	ChunGrowthDataList mChunkGrowthDataList;
+	ChunkGrowthDataList mChunkGrowthDataList;
 	//LinkedList<ChunkGrowthData> mChunkGrowthDataArray;
 	//ListIterator<ChunkGrowthData> mCurrentItr;
 //	ChunkGrowthData firstElem;
@@ -31,28 +38,60 @@ public class GrowthDataProvider {
 //	ChunkGrowthData currentElem;
 //	int chunkGrowthDataSize = 0;
 	
-	private TreeConfiguration treeConfig;
+	private TreeConfiguration mTreeConfig;
 	private long tick = 0;
 	
 	private GrowthDataProvider() {
 		mChunkGrowthDataMap = new TreeMap<Integer, TreeMap<Integer, ChunkGrowthData>>();
-		mChunkGrowthDataList = new ChunGrowthDataList();
+		mChunkGrowthDataList = new ChunkGrowthDataList();
 		//mChunkGrowthDataArray = new LinkedList<ChunkGrowthData>();
-		treeConfig = new TreeConfiguration("config/treegrowth.cfg");
+		
 		
 	}
 	
+
 	static public GrowthDataProvider getInstance() {
 		if(instance == null) instance = new GrowthDataProvider();
 		return instance;
 	}
+	
+	/**
+	 * Initializes the tree config.
+	 * 
+	 * @param treeConfigPath
+	 */
+	public void init(String treeConfigPath) {
+		mTreeConfig = new TreeConfiguration(treeConfigPath);
+	}
+	
+	
+	/**
+	 * Checks if a given blockID is wood. This is due to the different block id's provided in the config.
+	 * @param blockID
+	 * @return
+	 */
 	public boolean isWood(int blockID) {
-		return treeConfig.isWood(blockID);
+		return mTreeConfig.isWood(blockID);
 	}
+	/**
+	 * Checks if a given blockID is leaves. This is due to the different block id's provided in the config.
+	 * @param blockID
+	 * @return
+	 */
 	public boolean isLeave(int blockID) {
-		return treeConfig.isLeaves(blockID);
+		return mTreeConfig.isLeaves(blockID);
 	}
-	public TreeData getTreeData(Chunk chunk, Tree tree, Coord3i wood, Coord3i leaves) {
+	
+	
+	/**
+	 * Get config TreeData object, that fit the parameters.
+	 * @param chunk
+	 * @param tree
+	 * @param wood
+	 * @param leaves
+	 * @return
+	 */
+	private TreeData getTreeData(Chunk chunk, Tree tree, Coord3i wood, Coord3i leaves) {
 		int woodID = Common.getBlockIDAbs(chunk, wood.x, wood.y, wood.z);
 		int leafID = Common.getBlockIDAbs(chunk, leaves.x, leaves.y, leaves.z);
 		int woodMeta = Common.getBlockMetadataAbs(chunk,wood.x, wood.y, wood.z);
@@ -67,10 +106,18 @@ public class GrowthDataProvider {
 		}
 		leafMeta = leafBlock.damageDropped(leafMeta);
 		woodMeta = woodBlock.damageDropped(woodMeta);
-		TreeData treeData = treeConfig.getTreeData(woodID, woodMeta, leafID, leafMeta, tree.getSize());
+		TreeData treeData = mTreeConfig.getTreeData(woodID, woodMeta, leafID, leafMeta, tree.getSize());
 		
 		return treeData;
 	}
+	
+	/**
+	 * Get config TreeData object, that fit the parameters. If the basic call does not get through. Other surrounding blocks are checked out.
+	 * @param chunk
+	 * @param tree
+	 * @return
+	 */
+	
 	public TreeData getTreeData(Chunk chunk, Tree tree) {
 		TreeData treeData = null;
 		treeData = getTreeData(chunk, tree, new Coord3i(tree.getCoord1().x,tree.getCoord1().y,tree.getCoord1().z),
@@ -99,14 +146,30 @@ public class GrowthDataProvider {
 		ChunkGrowthData data = xdim.get(z);
 		return data;
 	}
+	
+	
+	/**
+	 * Increases the internal tick counter. 
+	 * @return true, when the internal tick counter*TICK_TIME > GLOBAL_PROCESSING_TIME
+	 */
 	public boolean needsProcessing() {
 		tick++;
 		return tick*Constants.TICK_TIME > Constants.GLOBAL_PROCESSING_TIME;
 	}
 	
+	/**
+	 * Resets the tick counter.
+	 */
 	public void updateProcessing() {
 		tick = 0;
 	}
+	/**
+	 * This should be called, when a chunk gets loaded, to allow its processing.
+	 * 
+	 * @param x
+	 * @param z
+	 * @param chunk
+	 */
 	public synchronized void chunkGrowthDataLoaded(int x, int z, Chunk chunk) {
 		ChunkGrowthData data = getChunkGrowthData(x,z);
 		if(data == null) {
@@ -116,20 +179,24 @@ public class GrowthDataProvider {
 		data.chunk = chunk;
 	}
 	
+	/**
+	 * This should be called, when a chunk gets unloaded, to denie its processing.
+	 * 
+	 * @param x
+	 * @param z
+	 */
 	public synchronized void chunkGrowthDataUnloaded(int x, int z) {
 		ChunkGrowthData data = getChunkGrowthData(x,z);
-//		if(data == null) {
-//			data = new ChunkGrowthData();
-//			addChunkGrowthData(x, z, data);
-//		}
 		data.chunk = null;
 
 	}
-//	public ChunkGrowthData getChunkGrowthData(int id) {
-//		
-//		return mChunkGrowthDataArray.get(id);
-//	}
+
 	
+	/**
+	 * Gets the next queued chunk to process.
+	 * 
+	 * @return
+	 */
 	public synchronized ChunkGrowthData getNextProcessing() {
 		if(mChunkGrowthDataList.size == 0) return null;
 		if(mChunkGrowthDataList.currentElem == null) mChunkGrowthDataList.currentElem = mChunkGrowthDataList.firstElem;
@@ -143,6 +210,13 @@ public class GrowthDataProvider {
 		
 		return mChunkGrowthDataList.currentElem;
 	}
+	/**
+	 * This adds a chunk to the processing set.
+	 * 
+	 * @param x
+	 * @param z
+	 * @param data
+	 */
 	public void addChunkGrowthData(int x, int z, ChunkGrowthData data) {
 		TreeMap<Integer, ChunkGrowthData> xdim = mChunkGrowthDataMap.get(x);
 		if(xdim == null) {
@@ -155,19 +229,22 @@ public class GrowthDataProvider {
 		mChunkGrowthDataList.add(data);
 	}
 	
+	/**
+	 * Removes a chunk from the processing set.
+	 * @param x
+	 * @param z
+	 */
 	public void removeChunkGrowthData(int x, int z) {
-		//TODO Get and remove?
 		ChunkGrowthData data = getChunkGrowthData(x,z);
 		mChunkGrowthDataList.remove(data);
 		//This should not fail
 		mChunkGrowthDataMap.get(x).remove(z);
 	}
-	
-	public ChunkGrowthData createChunkGrowthData(int x, int z) {
-		ChunkGrowthData data = new ChunkGrowthData();
-		//setChunkGrowthData(x, z, data);
-		return data;
-	}
+
+	/**
+	 * Gets the memory size of all chunks without overhead
+	 * @return
+	 */
 	public int getSize() {
 		int size = 0;
 		for(TreeMap<Integer, ChunkGrowthData> value : mChunkGrowthDataMap.values()) {
@@ -176,7 +253,13 @@ public class GrowthDataProvider {
 		return size;
 	}
 	
-	public class ChunGrowthDataList {
+	/**
+	 * A simple double linked list.
+	 * 
+	 * @author xeedness
+	 *
+	 */
+	public class ChunkGrowthDataList {
 		public ChunkGrowthData firstElem;
 		public ChunkGrowthData lastElem;
 		public ChunkGrowthData currentElem;

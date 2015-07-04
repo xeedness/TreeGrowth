@@ -1,20 +1,48 @@
 package com.algorim.treegrowth;
 
+import java.io.File;
+
+import com.algorim.treegrowth.config.Constants;
+import com.algorim.treegrowth.events.ChunkEventHandler;
 import com.algorim.treegrowth.manager.GrowthDataProvider;
 import com.algorim.treegrowth.manager.GrowthProcessor;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class CommonProxy {
 	ChunkEventHandler mChunkEventHandler;
 	GrowthDataProvider mGrowthDataProvider;
 	GrowthProcessor mGrowthProcessor;
+	public void preInit(FMLPreInitializationEvent event) {
+		mGrowthDataProvider = GrowthDataProvider.getInstance();
+		mGrowthDataProvider.init(event.getModConfigurationDirectory()+"/treegrowth/trees.cfg");
+		
+		Configuration config = new Configuration(new File(event.getModConfigurationDirectory()+"/treegrowth/treegrowth.cfg"));
+		config.load();
+		
+		Constants.AUTO_PROCESSING_ENABLED = config.get(Configuration.CATEGORY_GENERAL, "TreeGrowthEnabled", true).getBoolean(true);
+		
+		Property maxProcessingTimeProp = config.get(Configuration.CATEGORY_GENERAL, "MaxProcessingTime", Constants.MAX_PROCESSING_TIME);
+		maxProcessingTimeProp.comment = "If the current processing step takes less than this time, another one is scheduled. Default: "+Constants.MAX_PROCESSING_TIME+" [ms]";
+		Constants.MAX_PROCESSING_TIME = maxProcessingTimeProp.getInt();
+		
+		Property globalProcessingTimeProp = config.get(Configuration.CATEGORY_GENERAL, "GlobalProcessingTime",  Constants.GLOBAL_PROCESSING_TIME);
+		globalProcessingTimeProp.comment = "The rate at which processing steps are initiated. Default: "+Constants.GLOBAL_PROCESSING_TIME+" [ms]";
+		Constants.GLOBAL_PROCESSING_TIME = globalProcessingTimeProp.getInt();
+		
+		Property chunkUpdateTimeTimeProp = config.get(Configuration.CATEGORY_GENERAL, "ChunkUpdateTime",  Constants.CHUNK_UPDATE_TIME);
+		chunkUpdateTimeTimeProp.comment = "The update schedule of a chunk. Default "+Constants.CHUNK_UPDATE_TIME+"  [ms]";
+		Constants.CHUNK_UPDATE_TIME = chunkUpdateTimeTimeProp.getInt();
+		
+		config.save();
+	}
 	public void init(FMLInitializationEvent event) {
-    	
-    	mGrowthDataProvider = GrowthDataProvider.getInstance();
     	mGrowthProcessor = GrowthProcessor.getInstance();
     	System.out.println("Creating and registering chunkEventHandler");
     	mChunkEventHandler = new ChunkEventHandler(mGrowthDataProvider, mGrowthProcessor);

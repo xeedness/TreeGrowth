@@ -5,15 +5,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import com.algorim.treegrowth.Common;
-import com.algorim.treegrowth.objects.Coord2i;
-import com.algorim.treegrowth.objects.Coord3i;
-import com.algorim.treegrowth.objects.Tree;
+import com.algorim.treegrowth.utilities.Common;
+import com.algorim.treegrowth.utilities.Coord2i;
+import com.algorim.treegrowth.utilities.Coord3i;
+import com.algorim.treegrowth.utilities.Tree;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+/**
+ * This class processes an already detected tree. 
+ * It calculates the position candidates for new saplings.
+ * Also it calculates information about the overall fertility of the surrounding area of the tree.
+ * 
+ * 
+ * @author xeedness
+ *
+ */
 public class TreeProcessor {
 	public static final int TYPE_FERTILE = 0;
 	public static final int TYPE_OCCUPIED = 1;
@@ -60,6 +69,9 @@ public class TreeProcessor {
 //		System.out.println("treeGrowthDimension: "+tree.getGrowthDimension());
 	}
 	
+	/**
+	 * This is the main processing routine. It calculates the fertility, aridity, heighestRating and candidate positions.
+	 */
 	public void process() {
 		generateArrays();
 		
@@ -94,21 +106,53 @@ public class TreeProcessor {
 		
 		
 	}
+	
+	/**
+	 * Get the heighest rating achieved by a position. 
+	 * @return values range from 0 to {@value TreeProcessor#RATING_RADIUS}
+	 * @see TreeProcessor#getRating(int, int) 
+	 */
 	public int getHeighestRating() {
 		return heighestRating;
 	}
+	
+	/**
+	 * Gets the fertility of the surrounding area of the tree
+	 * @return values range from 0 to 1 
+	 */
 	public float getFertility() {
 		return (float)(cFertile)/getArea();
 	}
+	/**
+	 * Gets the aridity of the surrounding area of the tree
+	 * @return values range from 0 to 1 
+	 */
 	public float getAridity() {
 		return (float)(cArid)/getArea();
 	}
+	/**
+	 * Area of the surrounding area
+	 * @return
+	 */
 	public int getArea() {
 		return (mGroundRating.length*mGroundRating.length);
 	}
+	/**
+	 * Gets the sapling candidates
+	 * @return
+	 */
 	public ArrayList<Coord3i> getCandidates() {
 		return candidates;
 	}
+	/**
+	 * Calculates the rating of the given position.
+	 * Every tile in a {@value TreeProcessor#RATING_RADIUS} radius, which is fertile increases the rating.
+	 * If the position is no valid placement 0 is returned
+	 * 
+	 * @param x
+	 * @param y
+	 * @return values range from 0 to {@value TreeProcessor#RATING_RADIUS}
+	 */
 	private int getRating(int x, int y) {
 		int rating = 0;
 		if(!mValidPlace[x+RATING_RADIUS][y+RATING_RADIUS]) return rating;
@@ -123,6 +167,9 @@ public class TreeProcessor {
 		
 		return rating;
 	}
+	/**
+	 * Fills the arrays with informations.
+	 */
 	private void generateArrays() {
 		for(int x = start.x-RATING_RADIUS; x<= end.x+RATING_RADIUS;x++) {
 			for(int z = start.y-RATING_RADIUS; z<= end.y+RATING_RADIUS;z++) {
@@ -142,6 +189,12 @@ public class TreeProcessor {
 		}
 	}
 	
+	/**
+	 * Write int[][] array to disc
+	 * 
+	 * @param array
+	 * @param filename
+	 */
 	private void writeIntArray(int[][] array, String filename) {
 		File f = new File(filename);
 		try {
@@ -159,7 +212,12 @@ public class TreeProcessor {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Write boolean[][] array to disc
+	 * 
+	 * @param array
+	 * @param filename
+	 */
 	private void writeBooleanArray(boolean[][] array, String filename) {
 		File f = new File(filename);
 		try {
@@ -177,19 +235,4 @@ public class TreeProcessor {
 			e.printStackTrace();
 		}
 	}
-	
-
-	//TODO Maybe put this in common
-	private int getWorldX(int x) {
-		return (mChunk.xPosition << 4)+x;
-	}
-	
-	private int getWorldZ(int z) {
-		return (mChunk.zPosition << 4)+z;
-	}
-
-
-	
-	
-	
 }

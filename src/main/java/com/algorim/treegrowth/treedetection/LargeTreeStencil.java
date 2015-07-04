@@ -3,9 +3,9 @@ package com.algorim.treegrowth.treedetection;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-import com.algorim.treegrowth.Common;
-import com.algorim.treegrowth.Constants;
-import com.algorim.treegrowth.objects.Tree;
+import com.algorim.treegrowth.config.Constants;
+import com.algorim.treegrowth.utilities.Common;
+import com.algorim.treegrowth.utilities.Tree;
 
 /**
  * A tree stencil for 2x2 trees.

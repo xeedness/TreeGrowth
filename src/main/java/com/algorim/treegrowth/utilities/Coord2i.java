@@ -1,4 +1,4 @@
-package com.algorim.treegrowth.objects;
+package com.algorim.treegrowth.utilities;
 
 public class Coord2i {
 	public int x,y;
