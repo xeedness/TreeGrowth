@@ -111,10 +111,6 @@ public class GrowthProcessor {
 						//System.out.println("Skipped tree due to aridity: "+treeProcessor.getAridity());
 						continue;
 					}
-					if(treeProcessor.getFertility() < Constants.FERTILITY_THRESHOLD) {
-						//System.out.println("Skipped tree due to fertility: "+treeProcessor.getFertility());
-						continue;
-					}
 					
 					int i = new Random().nextInt(treeProcessor.getCandidates().size());
 					Coord3i c = treeProcessor.getCandidates().get(i);
