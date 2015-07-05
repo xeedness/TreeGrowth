@@ -6,7 +6,7 @@ Every tree is then processed on its own. Based on its surroundings and character
 - **xeedness** - Creator
 
 ## How it works
-
+TreeGrowth consists of four main parts. The scheduling manages the whole processing. The Tree Configuration holds different tree types. The Tree Detection detects trees in a chunk. The Tree processing spawns new sapling depending on the characteristics of the tree and its surroundings.
 ### Scheduling
 The scheduling is based on ingame ticks. TreeGrowth manages a list of loaded chunks. Every loaded chunk should be processed at a specific rate. The main scheduling routine looks for the next chunk, that needs processing. If the processing is done fast, another chunk can be processed until a maximum processing time is met or no more chunks need processing. 
 
