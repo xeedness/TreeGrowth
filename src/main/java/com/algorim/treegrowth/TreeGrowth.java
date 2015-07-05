@@ -27,8 +27,7 @@ public class TreeGrowth
     public static final String VERSION = "0.0.0";
     
     
-    private GrowthItem growthItem;
-    private TreeGrowthConfigItem configItem;
+   
 
 	@SidedProxy(clientSide="com.algorim.treegrowth.ClientProxy",
 	            serverSide="com.algorim.treegrowth.ServerProxy")
@@ -38,13 +37,6 @@ public class TreeGrowth
     public void preInit(FMLPreInitializationEvent event)
     {
 		proxy.preInit(event);
-		//TODO Ids?
-		growthItem = new GrowthItem(0);
-		configItem = new TreeGrowthConfigItem(1);
-
-		GameRegistry.registerItem(growthItem, "growthItem");
-		GameRegistry.registerItem(configItem, "configItem");
-         
     }
         
     @EventHandler

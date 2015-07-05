@@ -3,7 +3,10 @@ package com.algorim.treegrowth;
 import java.io.File;
 
 import com.algorim.treegrowth.config.Constants;
+import com.algorim.treegrowth.config.IDConfiguration;
 import com.algorim.treegrowth.events.ChunkEventHandler;
+import com.algorim.treegrowth.items.GrowthItem;
+import com.algorim.treegrowth.items.TreeGrowthConfigItem;
 import com.algorim.treegrowth.manager.GrowthDataProvider;
 import com.algorim.treegrowth.manager.GrowthProcessor;
 
@@ -14,14 +17,26 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
 	ChunkEventHandler mChunkEventHandler;
 	GrowthDataProvider mGrowthDataProvider;
 	GrowthProcessor mGrowthProcessor;
+	
+	private GrowthItem mGrowthItem;
+	private TreeGrowthConfigItem mConfigItem;
+	
 	public void preInit(FMLPreInitializationEvent event) {
 		mGrowthDataProvider = GrowthDataProvider.getInstance();
 		mGrowthDataProvider.init(event.getModConfigurationDirectory()+"/treegrowth/trees.cfg");
+		IDConfiguration.init(event.getModConfigurationDirectory()+"/treegrowth/ids.cfg");
+		mGrowthItem = new GrowthItem(IDConfiguration.growthItemID);
+		mConfigItem = new TreeGrowthConfigItem(IDConfiguration.treeGrowthConfigItemID);
+
+		GameRegistry.registerItem(mGrowthItem, "growthItem");
+		GameRegistry.registerItem(mConfigItem, "configItem");
+         
 		
 		Configuration config = new Configuration(new File(event.getModConfigurationDirectory()+"/treegrowth/treegrowth.cfg"));
 		config.load();

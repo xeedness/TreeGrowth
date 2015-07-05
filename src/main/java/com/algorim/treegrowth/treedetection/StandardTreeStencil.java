@@ -38,7 +38,6 @@ public class StandardTreeStencil implements ITreeStencil {
 			int depth = 0;
 			while(fits == false && depth <= MAX_GAP_BOT) {
 				if(Common.isLeave(chunk, x, y+1+depth, z)) fits = true;
-				//TODO Only Air allowed?
 				if(!Common.isAir(chunk, x, y+1+depth, z)) break;
 				depth++;
 			}
@@ -91,12 +90,10 @@ public class StandardTreeStencil implements ITreeStencil {
 	public boolean bottomFits(Chunk chunk, int x, int y, int z) {
 		boolean fits = false;
 		
-		//TODO Restrict to dirt?
 		if(Common.isWoodLog(chunk, x, y, z)) {
 			int depth = 0;
 			while(fits == false && depth <= MAX_GAP_BOT) {
 				if(Common.isDirt(chunk, x, y-1-depth, z)) fits = true;
-				//TODO Only Air allowed?
 				if(!Common.isAir(chunk, x, y-1-depth, z)) break;
 				depth++;
 			}

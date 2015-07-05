@@ -17,7 +17,7 @@ public class Tree {
 	private Chunk chunk;
 	private ITreeStencil stencil;
 	
-	public Tree(Chunk chunk, ITreeStencil stencil, int x1, int x2, int y1, int y2, int z1, int z2) {
+	public Tree(Chunk chunk, ITreeStencil stencil, int x1, int y1, int z1, int x2, int y2, int z2) {
 		c1 = new Coord3i(x1,y1,z1);
 		c2 = new Coord3i(x2,y2,z2);
 		this.chunk = chunk;

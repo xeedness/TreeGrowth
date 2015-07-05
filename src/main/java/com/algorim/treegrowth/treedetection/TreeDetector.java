@@ -29,7 +29,7 @@ public class TreeDetector {
 	private TreeDetector() {
 		standardStencil = new StandardTreeStencil();
 		stencils = new ArrayList<ITreeStencil>();
-		stencils.add(new LargeTreeStencil());
+		stencils.add(new LargeTreeStencil(2));
 		stencils.add(new StandardTreeStencil());
 	}
 	

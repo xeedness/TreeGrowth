@@ -62,6 +62,39 @@ public class GrowthProcessor {
 		for(Tree tree : trees) {
 			//System.out.println("Found a tree: "+tree+" valid: "+tree.validate()+", size:"+tree.getSize());
 			if(tree.validate()) {
+//				int xDim=0, zDim=0;
+//				int x = tree.c1.x-1;
+//				int z = tree.c1.z;
+//				int y = tree.c2.y-2;
+//				while(Common.isLeave(chunk, x, y, z) || Common.isWoodLog(chunk, x, y, z) ) {
+//					xDim++;
+//					x--;
+//				}
+//				x = tree.c2.x+1;
+//				z = tree.c2.z;
+//				while(Common.isLeave(chunk, x, y, z) || Common.isWoodLog(chunk, x, y, z) ) {
+//					xDim++;
+//					x++;
+//				}
+//				
+//				x = tree.c1.x;
+//				z = tree.c1.z-1;
+//				while(Common.isLeave(chunk, x, y, z) || Common.isWoodLog(chunk, x, y, z) ) {
+//					zDim++;
+//					z--;
+//				}
+//				
+//				x = tree.c2.x;
+//				z = tree.c2.z+1;
+//				while(Common.isLeave(chunk, x, y, z) || Common.isWoodLog(chunk, x, y, z) ) {
+//					zDim++;
+//					z++;
+//				}
+//				xDim += tree.getSize();
+//				zDim += tree.getSize();
+//				
+//				System.out.println("Tree dims: ("+xDim+","+zDim+") "+tree.getSpaceRequirement()+" -> "+Math.min(xDim, zDim));
+//						
 				
 				TreeProcessor treeProcessor = new TreeProcessor(chunk, tree);
 				treeProcessor.process();
@@ -87,8 +120,8 @@ public class GrowthProcessor {
 					float f = new Random().nextFloat();
 					if(f < treeData.getFertility()) { 
 						chunk.worldObj.setBlock(c.x, c.y, c.z, sap.itemID, sap.getItemDamage(), 2);
-						((BlockSapling)Block.sapling).growTree(chunk.worldObj, c.x, c.y, c.z, chunk.worldObj.rand);
-						System.out.println("Spawned new Tree.");
+						//((BlockSapling)Block.sapling).growTree(chunk.worldObj, c.x, c.y, c.z, chunk.worldObj.rand);
+						//System.out.println("Spawned new Tree.");
 					}
 				}				
 			} else {

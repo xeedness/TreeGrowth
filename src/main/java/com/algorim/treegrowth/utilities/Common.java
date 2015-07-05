@@ -96,7 +96,15 @@ public class Common {
 		return  Block.dirt.blockID == world.getBlockId(x, y, z) ||
 				Block.grass.blockID == world.getBlockId(x, y, z);
 	}
-	//TODO Lianen?
+	/**
+	 * Checks if block is wood or leaves
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public static boolean isTreePart(World world, int x, int y, int z) {
 		int blockID = world.getBlockId(x, y, z);
 		return GrowthDataProvider.getInstance().isWood(blockID) ||
@@ -104,6 +112,14 @@ public class Common {
 		
 	}
 	
+	/**
+	 * @see #isFertile
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public static boolean isFertile(World world, int x, int y, int z) {
 		int blockID = world.getBlockId(x, y, z);
 		return isFertile(blockID);
@@ -131,4 +147,81 @@ public class Common {
 		
 		log(area, posVec+" "+message);
 	}
+	
+	/**
+	 * Checks, if the whole layer of the given coordinate is wood
+	 * 
+	 * @param chunk
+	 * @param x Absolute X Coordinate
+	 * @param y Absolute Y Coordinate
+	 * @param z Absolute Z Coordinate
+	 * @return
+	 */
+	public static boolean isWoodLogLayer(Chunk chunk,int x,int y,int z, int size) {
+		boolean allWood = true;
+		for(int xI=x; xI <= x+size; xI++) {
+			for(int zI=z; zI <= z+size; zI++) {
+				allWood &= isWoodLog(chunk, xI, y, zI);
+			}
+		}
+		return allWood;
+	}
+	/**
+	 * Checks, if the whole layer of the given coordinate are leaves
+	 * 
+	 * @param chunk
+	 * @param x Absolute X Coordinate
+	 * @param y Absolute Y Coordinate
+	 * @param z Absolute Z Coordinate
+	 * @return
+	 */
+	public static boolean isLeavesLayer(Chunk chunk,int x,int y,int z, int size) {
+		boolean allLeaves = true;
+		for(int xI=x; xI <= x+size; xI++) {
+			for(int zI=z; zI <= z+size; zI++) {
+				allLeaves &= isLeave(chunk, xI, y, zI);
+			}
+		}
+		return allLeaves;
+	}
+	/**
+	 * Checks, if the whole layer of the given coordinate is dirt
+	 * 
+	 * @param chunk
+	 * @param x Absolute X Coordinate
+	 * @param y Absolute Y Coordinate
+	 * @param z Absolute Z Coordinate
+	 * @return
+	 */
+	public static boolean isDirtLayer(Chunk chunk,int x,int y,int z, int size) {
+		boolean allDirt = true;
+		for(int xI=x; xI <= x+size; xI++) {
+			for(int zI=z; zI <= z+size; zI++) {
+				allDirt &= isDirt(chunk, xI, y, zI);
+			}
+		}
+		return allDirt;
+	}
+	
+	/**
+	 * Checks, if the whole layer of the given coordinate is air
+	 * 
+	 * @param chunk
+	 * @param x Absolute X Coordinate
+	 * @param y Absolute Y Coordinate
+	 * @param z Absolute Z Coordinate
+	 * @return
+	 */
+	public static boolean isAirLayer(Chunk chunk,int x,int y,int z, int size) {
+		boolean allAir = true;
+		for(int xI=x; xI <= x+size; xI++) {
+			for(int zI=z; zI <= z+size; zI++) {
+				allAir &= isAir(chunk, xI, y, zI);
+			}
+		}
+		return allAir;
+	}
+	
+	
+	
 }

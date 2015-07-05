@@ -124,13 +124,11 @@ public class GrowthDataProvider {
 			new Coord3i(tree.getCoord2().x, tree.getCoord2().y+1, tree.getCoord2().z));
 		
 		if(treeData == null) {
-			
-			//TODO This doesnt work if the tree has a weird size
 			outerloop:
-			for(int x=tree.getCoord2().x-1; x<=tree.getCoord2().x+1; x++) {
-				for(int z=tree.getCoord2().z-1; z<=tree.getCoord2().z+1; z++) {
+			for(int x=tree.getCoord1().x-1; x<=tree.getCoord2().x+1; x++) {
+				for(int z=tree.getCoord1().z-1; z<=tree.getCoord2().z+1; z++) {
 					treeData = getTreeData(chunk, tree, new Coord3i(tree.getCoord1().x,tree.getCoord1().y,tree.getCoord1().z),
-							new Coord3i(x, tree.getCoord2().y+1, z));
+							new Coord3i(x, tree.getCoord2().y, z));
 					if(treeData != null) break outerloop;
 				}
 			}
