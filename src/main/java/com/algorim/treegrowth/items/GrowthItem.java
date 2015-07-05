@@ -26,7 +26,6 @@ public class GrowthItem extends Item {
         
         @Override
         public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-        	System.out.println("Item used: GrowthItem");
         	
         	TreeGrowth.proxy.processChunkAtWorldCoords(par3World,
         			par2EntityPlayer.getPlayerCoordinates().posX,

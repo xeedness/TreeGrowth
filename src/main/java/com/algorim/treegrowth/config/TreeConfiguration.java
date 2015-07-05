@@ -3,6 +3,7 @@ package com.algorim.treegrowth.config;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeMap;
+import java.util.logging.Level;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -21,12 +22,15 @@ import org.apache.commons.io.FileUtils;
 
 
 
+
 import com.algorim.treegrowth.utilities.TreeData;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+
+import cpw.mods.fml.common.FMLLog;
 
 /**
  * This class holds the different tree structures
@@ -68,7 +72,7 @@ public class TreeConfiguration {
 			out = out.replace(",",",\r\n");
 			FileUtils.write(new File(filename), out);
 		} catch (IOException e) {
-			System.out.println("Could not initialize tree config due to "+e.getMessage());
+			FMLLog.log(Level.SEVERE, "TreeGrowth could not initialize tree config due to "+e.getMessage());
 		}
 	}
 	
@@ -103,10 +107,10 @@ public class TreeConfiguration {
 		try {
 			treeData = gson.fromJson(FileUtils.readFileToString(new File(filename)), collectionType);
 		} catch (JsonSyntaxException e) {
-			System.out.println("Could not load tree config due to "+e.getMessage());
+			FMLLog.log(Level.SEVERE, "TreeGrowth could not load tree config due to "+e.getMessage());
 			//e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Could not load tree config due to "+e.getMessage());
+			FMLLog.log(Level.SEVERE, "TreeGrowth could not load tree config due to "+e.getMessage());
 			//e.printStackTrace();
 		}
 		
@@ -133,7 +137,7 @@ public class TreeConfiguration {
 			//System.out.println("Looking up TreeData: "+woodID+" "+woodMeta+" "+leafID+" "+leafMeta+" "+dim);
 			if(d.equals(woodID, woodMeta, leafID, leafMeta, dim)) return d;			
 		}
-		System.out.println("TreeConfiguration does not contain detected tree.");
+		FMLLog.log(Level.INFO, "TreeGrowth TreeConfiguration does not contain detected tree.");
 		return null;
 	}
 	

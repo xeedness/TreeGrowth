@@ -2,6 +2,7 @@ package com.algorim.treegrowth.manager;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
 
 import com.algorim.treegrowth.config.Constants;
 import com.algorim.treegrowth.treedetection.TreeDetector;
@@ -10,6 +11,7 @@ import com.algorim.treegrowth.utilities.Coord3i;
 import com.algorim.treegrowth.utilities.Tree;
 import com.algorim.treegrowth.utilities.TreeData;
 
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
@@ -44,9 +46,9 @@ public class GrowthProcessor {
 	public void toggleAutoProcessing() {
 		Constants.AUTO_PROCESSING_ENABLED= !Constants.AUTO_PROCESSING_ENABLED;
 		if(!Constants.AUTO_PROCESSING_ENABLED)
-			System.out.println("Disabled autoProcessing");
+			FMLLog.log(Level.INFO, "Disabled autoProcessing");
 		else
-			System.out.println("Enabled autoProcessing");
+			FMLLog.log(Level.INFO, "Enabled autoProcessing");
 	}
 	
 	/**
@@ -57,7 +59,7 @@ public class GrowthProcessor {
 	 */
 	public boolean processChunk(Chunk chunk) {
 		
-		System.out.println("Processing Chunk: "+chunk.xPosition+" "+chunk.zPosition);
+		//System.out.println("Processing Chunk: "+chunk.xPosition+" "+chunk.zPosition);
 		ArrayList<Tree> trees = TreeDetector.getInstance().findTrees(chunk);
 		for(Tree tree : trees) {
 			//System.out.println("Found a tree: "+tree+" valid: "+tree.validate()+", size:"+tree.getSize());
@@ -102,15 +104,15 @@ public class GrowthProcessor {
 				TreeData treeData = mGrowthDataProvider.getTreeData(chunk,tree);
 				if(treeData != null && !chunk.worldObj.isRemote) {
 					if(treeProcessor.getHeighestRating() < Constants.RATING_THRESHOLD) {
-						System.out.println("Skipped tree due to heighestRating: "+treeProcessor.getHeighestRating());
+						//System.out.println("Skipped tree due to heighestRating: "+treeProcessor.getHeighestRating());
 						continue;
 					}
 					if(treeProcessor.getAridity() > Constants.ARIDITY_THRESHOLD) {
-						System.out.println("Skipped tree due to aridity: "+treeProcessor.getAridity());
+						//System.out.println("Skipped tree due to aridity: "+treeProcessor.getAridity());
 						continue;
 					}
 					if(treeProcessor.getFertility() < Constants.FERTILITY_THRESHOLD) {
-						System.out.println("Skipped tree due to fertility: "+treeProcessor.getFertility());
+						//System.out.println("Skipped tree due to fertility: "+treeProcessor.getFertility());
 						continue;
 					}
 					

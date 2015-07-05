@@ -56,26 +56,6 @@ public class TreeGrowth
     public void init(FMLInitializationEvent event)
     {
     	proxy.init(event);
-    	TickRegistry.registerTickHandler(new TickHandler(), Side.SERVER);
-    	ArrayList<ItemStack> saplings = new ArrayList<ItemStack>();
-    	ArrayList<ItemStack> leaves = new ArrayList<ItemStack>();
-    	ArrayList<ItemStack> wood = new ArrayList<ItemStack>();
-    	
-    	Block.sapling.getSubBlocks(Block.sapling.blockID, null, saplings);
-    	Block.leaves.getSubBlocks(Block.leaves.blockID, null, leaves);
-    	Block.wood.getSubBlocks(Block.wood.blockID, null, wood);
-    	
-    	for(ItemStack stack : saplings) {
-    		System.out.println("Sapling: ("+stack.itemID+", "+stack.getItemDamage()+")");
-    	}
-    	
-    	for(ItemStack stack : leaves) {
-    		System.out.println("Leaves: ("+stack.itemID+", "+stack.getItemDamage()+")");
-    	}
-    	
-    	for(ItemStack stack : wood) {
-    		System.out.println("Wood: ("+stack.itemID+", "+stack.getItemDamage()+")");
-    	}
-		
+    	TickRegistry.registerTickHandler(new TickHandler(), Side.SERVER);		
     }
 }
