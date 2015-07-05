@@ -59,7 +59,6 @@ public class CommonProxy {
 	}
 	public void init(FMLInitializationEvent event) {
     	mGrowthProcessor = GrowthProcessor.getInstance();
-    	System.out.println("Creating and registering chunkEventHandler");
     	mChunkEventHandler = new ChunkEventHandler(mGrowthDataProvider, mGrowthProcessor);
         MinecraftForge.EVENT_BUS.register(mChunkEventHandler);
 	}
