@@ -159,8 +159,8 @@ public class Common {
 	 */
 	public static boolean isWoodLogLayer(Chunk chunk,int x,int y,int z, int size) {
 		boolean allWood = true;
-		for(int xI=x; xI <= x+size; xI++) {
-			for(int zI=z; zI <= z+size; zI++) {
+		for(int xI=x; xI < x+size; xI++) {
+			for(int zI=z; zI < z+size; zI++) {
 				allWood &= isWoodLog(chunk, xI, y, zI);
 			}
 		}
@@ -177,8 +177,8 @@ public class Common {
 	 */
 	public static boolean isLeavesLayer(Chunk chunk,int x,int y,int z, int size) {
 		boolean allLeaves = true;
-		for(int xI=x; xI <= x+size; xI++) {
-			for(int zI=z; zI <= z+size; zI++) {
+		for(int xI=x; xI < x+size; xI++) {
+			for(int zI=z; zI < z+size; zI++) {
 				allLeaves &= isLeave(chunk, xI, y, zI);
 			}
 		}
@@ -195,8 +195,8 @@ public class Common {
 	 */
 	public static boolean isDirtLayer(Chunk chunk,int x,int y,int z, int size) {
 		boolean allDirt = true;
-		for(int xI=x; xI <= x+size; xI++) {
-			for(int zI=z; zI <= z+size; zI++) {
+		for(int xI=x; xI < x+size; xI++) {
+			for(int zI=z; zI < z+size; zI++) {
 				allDirt &= isDirt(chunk, xI, y, zI);
 			}
 		}
@@ -214,8 +214,8 @@ public class Common {
 	 */
 	public static boolean isAirLayer(Chunk chunk,int x,int y,int z, int size) {
 		boolean allAir = true;
-		for(int xI=x; xI <= x+size; xI++) {
-			for(int zI=z; zI <= z+size; zI++) {
+		for(int xI=x; xI < x+size; xI++) {
+			for(int zI=z; zI < z+size; zI++) {
 				allAir &= isAir(chunk, xI, y, zI);
 			}
 		}
