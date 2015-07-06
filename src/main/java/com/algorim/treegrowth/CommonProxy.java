@@ -6,6 +6,7 @@ import com.algorim.treegrowth.config.Constants;
 import com.algorim.treegrowth.config.IDConfiguration;
 import com.algorim.treegrowth.events.ChunkEventHandler;
 import com.algorim.treegrowth.items.GrowthItem;
+import com.algorim.treegrowth.items.StencilItem;
 import com.algorim.treegrowth.items.TreeGrowthConfigItem;
 import com.algorim.treegrowth.manager.GrowthDataProvider;
 import com.algorim.treegrowth.manager.GrowthProcessor;
@@ -26,6 +27,7 @@ public class CommonProxy {
 	
 	private GrowthItem mGrowthItem;
 	private TreeGrowthConfigItem mConfigItem;
+	private StencilItem mStencilItem;
 	
 	public void preInit(FMLPreInitializationEvent event) {
 		mGrowthDataProvider = GrowthDataProvider.getInstance();
@@ -33,9 +35,11 @@ public class CommonProxy {
 		IDConfiguration.init(event.getModConfigurationDirectory()+"/treegrowth/ids.cfg");
 		mGrowthItem = new GrowthItem(IDConfiguration.growthItemID);
 		mConfigItem = new TreeGrowthConfigItem(IDConfiguration.treeGrowthConfigItemID);
+		mStencilItem = new StencilItem(IDConfiguration.stencilItemID);
 
 		GameRegistry.registerItem(mGrowthItem, "growthItem");
 		GameRegistry.registerItem(mConfigItem, "configItem");
+		GameRegistry.registerItem(mStencilItem, "stencilItem");
          
 		
 		Configuration config = new Configuration(new File(event.getModConfigurationDirectory()+"/treegrowth/treegrowth.cfg"));
@@ -70,5 +74,16 @@ public class CommonProxy {
 	
 	public void toggleAutoProcessing() {
 		mGrowthProcessor.toggleAutoProcessing();
+	}
+	
+	/**
+	 * @see com.algorim.treegrowth.treedetection.TreeDetector#applyStencils(World, int, int, int)
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void applyStencils(World world, int x, int y, int z) {
+		mGrowthProcessor.applyStencils(world, x, y, z);
 	}
 }

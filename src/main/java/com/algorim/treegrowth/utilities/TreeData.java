@@ -91,5 +91,16 @@ public class TreeData {
 		return new ItemStack(saplingID, 1, saplingMeta);
 	}
 	
+	@Override
+	public String toString() {
+		return name+
+		", type: "+type+", "+
+		"wood: ("+woodID+":"+woodMeta+"), "+
+		"leaves: ("+leafID+":"+leafMeta+"), "+
+		"sapling: ("+saplingID+":"+saplingMeta+"), "+
+		"fertility: "+fertility;
+		
+	}
+	
 
 }

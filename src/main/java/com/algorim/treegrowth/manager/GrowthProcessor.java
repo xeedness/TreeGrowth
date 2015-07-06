@@ -18,6 +18,7 @@ import net.minecraft.block.BlockSapling;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -128,5 +129,16 @@ public class GrowthProcessor {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * @see com.algorim.treegrowth.treedetection.TreeDetector#applyStencils(World, int, int, int)
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void applyStencils(World world, int x, int y, int z) {
+		TreeDetector.getInstance().applyStencils(world, x, y, z);
 	}
 }

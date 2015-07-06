@@ -11,6 +11,7 @@ public class IDConfiguration {
 	public static Configuration config;
 	public static int growthItemID;
 	public static int treeGrowthConfigItemID;
+	public static int stencilItemID;
 	
 	
 	public static void init(String configFile)
@@ -20,6 +21,7 @@ public class IDConfiguration {
 			config.load();
 			growthItemID = config.getBlock("GrowthItem ID", 3000, null).getInt();
 			treeGrowthConfigItemID = config.getBlock("TreeGrowthConfigItem ID", 3001, null).getInt();
+			stencilItemID = config.getBlock("StencilItem ID", 3002, null).getInt();
 		} catch (Exception e) {
 			FMLLog.log(Level.SEVERE, e, "TreeGrowth has had a problem loading its configuration");
 		} finally {
