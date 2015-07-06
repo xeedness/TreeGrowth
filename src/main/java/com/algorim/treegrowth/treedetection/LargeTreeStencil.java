@@ -91,7 +91,11 @@ public class LargeTreeStencil implements ITreeStencil {
 		if(Common.isWoodLogLayer(chunk, x, y, z, size)) {
 			int depth = 0;
 			while(fits == false && depth <= MAX_GAP_BOT) {
-				if(Common.isDirtLayer(chunk, x, y-1-depth, z, size)) fits = true;
+				for(int xI = x; xI < x + size; xI++) {
+					for(int zI = z; zI < z + size; zI++) {
+						fits |= Common.isDirt(chunk, xI, y-1-depth, zI); 
+					}
+				}
 				//if(!Common.isAirLayer(chunk, x, y+1+depth, z, size)) break;
 				depth++;
 			}
