@@ -60,7 +60,10 @@ public class Common {
 	
 	public static int getBlockIDAbs(Chunk chunk, int x, int y, int z) {
 		//TODO Check if this works
-		return Block.getIdFromBlock(chunk.getBlock(new BlockPos(x, y, z)));
+		BlockPos pos = new BlockPos(x,y,z);
+		//chunk.getWorld().getChunkFromBlockCoords(pos);
+		
+		return Block.getIdFromBlock(chunk.getWorld().getChunkFromBlockCoords(pos).getBlock(pos));
 //		if((chunk.xPosition << 4) <= x && (chunk.xPosition << 4)+16 > x &&
 //				(chunk.zPosition << 4) <= z && (chunk.zPosition << 4)+16 > z)
 //			return chunk.getBlockID(x & 15, y, z & 15);

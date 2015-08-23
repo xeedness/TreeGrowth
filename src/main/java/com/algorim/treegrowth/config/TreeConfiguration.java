@@ -69,6 +69,8 @@ public class TreeConfiguration {
 		treeData.add(new TreeData("Birch", TreeData.TYPE_BASIC,1, 17, 2, 18, 2, 6, 2, 0.5f));
 		treeData.add(new TreeData("Jungle1", TreeData.TYPE_BASIC,1, 17, 3, 18, 3, 6, 3, 0.5f));
 		treeData.add(new TreeData("Jungle2",TreeData.TYPE_BASIC,2, 17, 3, 18, 3, 6, 3, 0.5f));
+		treeData.add(new TreeData("Acacia",TreeData.TYPE_BASIC,1, 162, 0, 161, 0, 6, 4, 0.5f));
+		treeData.add(new TreeData("DarkOak",TreeData.TYPE_BASIC,2, 162, 1, 161, 1, 6, 5, 0.5f));
 		
 		for(TreeData d : treeData) {
 			if(!woodIDs.contains(d.getWoodID()))
