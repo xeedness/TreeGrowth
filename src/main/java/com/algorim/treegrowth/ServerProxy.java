@@ -1,7 +1,6 @@
 package com.algorim.treegrowth;
 
-import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 
 

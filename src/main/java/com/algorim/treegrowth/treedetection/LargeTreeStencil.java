@@ -2,6 +2,7 @@ package com.algorim.treegrowth.treedetection;
 
 import java.util.concurrent.Callable;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -60,27 +61,26 @@ public class LargeTreeStencil implements ITreeStencil {
 		boolean fits = true;
 		
 		//Maybe add a negative block condition later (for example if 3x3 is introduced)
-		for(int y=tree.c1.y; y <= tree.c2.y; y++) {
-			if(!Common.isWoodLogLayer(chunk, tree.c1.x, y, tree.c1.z, size))	{
+		for(int y=tree.c1.getY(); y <= tree.c2.getY(); y++) {
+			if(!Common.isWoodLogLayer(chunk, tree.c1.getX(), y, tree.c1.getZ(), size))	{
 				fits = false;
 				break;
 			}
 		}
 		//Dimensions
-		if((tree.c2.y - tree.c1.y)+1 < Constants.MIN_TREE_HEIGHT) fits = false;
+		if((tree.c2.getY() - tree.c1.getY())+1 < Constants.MIN_TREE_HEIGHT) fits = false;
 		return fits;
 	}
 
 	@Override
 	public boolean inflate(Chunk chunk, Tree tree) {
 		boolean success = false;
-		if(Common.isWoodLogLayer(chunk, tree.c1.x, tree.c1.y, tree.c1.z, size)) {
-			tree.c2.x = tree.c1.x+1;
-			tree.c2.z = tree.c1.z+1;
+		if(Common.isWoodLogLayer(chunk, tree.c1.getX(), tree.c1.getY(), tree.c1.getZ(), size)) {
+			tree.c2 = new BlockPos(tree.c1.getX()+1, tree.c1.getY(), tree.c1.getZ()+1);
 			do {
-				tree.c1.y--;
-			} while(Common.isWoodLogLayer(chunk, tree.c1.x, tree.c1.y, tree.c1.z, size));
-			tree.c1.y++;
+				tree.c1 = tree.c1.add(0,-1,0);
+			} while(Common.isWoodLogLayer(chunk, tree.c1.getX(), tree.c1.getY(), tree.c1.getZ(), size));
+			tree.c1 = tree.c1.add(0,1,0);
 		}
 		return success;
 	}

@@ -1,7 +1,9 @@
 package com.algorim.treegrowth.utilities;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 
 /**
  * This class represents a tree type. For example a birch. 
@@ -87,8 +89,9 @@ public class TreeData {
 		return fertility;
 	}
 	
-	public ItemStack getSapling() {
-		return new ItemStack(saplingID, 1, saplingMeta);
+	public IBlockState getSapling() {
+		Block sap = (Block)(Block.blockRegistry.getObjectById(saplingID));
+		return sap.getStateFromMeta(saplingMeta);
 	}
 	
 	@Override

@@ -1,23 +1,17 @@
 package com.algorim.treegrowth.manager;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.Random;
 import java.util.TreeMap;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.chunk.Chunk;
 
 import com.algorim.treegrowth.config.Constants;
 import com.algorim.treegrowth.config.TreeConfiguration;
 import com.algorim.treegrowth.utilities.Common;
-import com.algorim.treegrowth.utilities.Coord3i;
 import com.algorim.treegrowth.utilities.Tree;
 import com.algorim.treegrowth.utilities.TreeData;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 /**
  * This class holds the chunk infos. 
@@ -91,21 +85,33 @@ public class GrowthDataProvider {
 	 * @param leaves
 	 * @return
 	 */
-	private TreeData getTreeData(Chunk chunk, Tree tree, Coord3i wood, Coord3i leaves) {
-		int woodID = Common.getBlockIDAbs(chunk, wood.x, wood.y, wood.z);
-		int leafID = Common.getBlockIDAbs(chunk, leaves.x, leaves.y, leaves.z);
-		int woodMeta = Common.getBlockMetadataAbs(chunk,wood.x, wood.y, wood.z);
-		int leafMeta = Common.getBlockMetadataAbs(chunk,leaves.x, leaves.y, leaves.z);
-		Block leafBlock = Block.blocksList[leafID];
-		Block woodBlock = Block.blocksList[woodID];
+	private TreeData getTreeData(Chunk chunk, Tree tree, BlockPos woodPos, BlockPos leavesPos) {
+		//return null;
+		int woodID = Common.getBlockIDAbs(chunk, woodPos.getX(), woodPos.getY(), woodPos.getZ());
+		int leafID = Common.getBlockIDAbs(chunk, leavesPos.getX(), leavesPos.getY(), leavesPos.getZ());
+		int woodMeta = Common.getBlockMetadataAbs(chunk,woodPos.getX(), woodPos.getY(), woodPos.getZ());
+		int leafMeta = Common.getBlockMetadataAbs(chunk,leavesPos.getX(), leavesPos.getY(), leavesPos.getZ());
+		
+		Block leafBlock = Block.getBlockById(leafID);
+		Block woodBlock = Block.getBlockById(woodID);
+		
+		
 		
 		//TODO Why does this happen?
 		if(leafBlock == null || woodBlock == null) {
 			//Common.log("GrowthData","Could not retrieve leaf or wood blocks. leaves("+leafID+"), wood("+woodID+")", wood, leaves);
 			return null;
 		}
-		leafMeta = leafBlock.damageDropped(leafMeta);
-		woodMeta = woodBlock.damageDropped(woodMeta);
+		
+		//TODO This does not work
+		BlockState bs = leafBlock.getBlockState();
+		
+//		leafBlock.getStateFromMeta((leafBlock.());
+//		leafBlock.damageDropped(1);
+//		leafBlock.damageDropped(leafBlock.getDefaultState());
+//		leafBlock.damageDropped(leafBlock.getDefaultState());
+		//leafMeta = leafBlock.damageDropped(leafMeta);
+		//woodMeta = woodBlock.damageDropped(woodMeta);
 		TreeData treeData = mTreeConfig.getTreeData(woodID, woodMeta, leafID, leafMeta, tree.getSize());
 		
 		return treeData;
@@ -120,15 +126,15 @@ public class GrowthDataProvider {
 	
 	public TreeData getTreeData(Chunk chunk, Tree tree) {
 		TreeData treeData = null;
-		treeData = getTreeData(chunk, tree, new Coord3i(tree.getCoord1().x,tree.getCoord1().y,tree.getCoord1().z),
-			new Coord3i(tree.getCoord2().x, tree.getCoord2().y+1, tree.getCoord2().z));
+		treeData = getTreeData(chunk, tree, new BlockPos(tree.getCoord1()),
+			new BlockPos(tree.getCoord2().getX(), tree.getCoord2().getY()+1, tree.getCoord2().getZ()));
 		
 		if(treeData == null) {
 			outerloop:
-			for(int x=tree.getCoord1().x-1; x<=tree.getCoord2().x+1; x++) {
-				for(int z=tree.getCoord1().z-1; z<=tree.getCoord2().z+1; z++) {
-					treeData = getTreeData(chunk, tree, new Coord3i(tree.getCoord1().x,tree.getCoord1().y,tree.getCoord1().z),
-							new Coord3i(x, tree.getCoord2().y, z));
+			for(int x=tree.getCoord1().getX()-1; x<=tree.getCoord2().getX()+1; x++) {
+				for(int z=tree.getCoord1().getZ()-1; z<=tree.getCoord2().getZ()+1; z++) {
+					treeData = getTreeData(chunk, tree, new BlockPos(tree.getCoord1()),
+							new BlockPos(x, tree.getCoord2().getY(), z));
 					if(treeData != null) break outerloop;
 				}
 			}

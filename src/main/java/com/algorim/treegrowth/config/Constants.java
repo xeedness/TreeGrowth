@@ -32,7 +32,7 @@ public class Constants {
 	public static int TICK_TIME = 50;
 	
 	//The update schedule of a chunk in m*s*ms
-	public static long CHUNK_UPDATE_TIME = 10*60*1000;
+	public static int CHUNK_UPDATE_TIME = 10*60*1000;
 	
 	
 	

@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.algorim.treegrowth.TreeGrowth;
 
@@ -15,12 +16,16 @@ import com.algorim.treegrowth.TreeGrowth;
  *
  */
 public class TreeGrowthConfigItem extends Item {
-
-    public TreeGrowthConfigItem(int arg0) {
-    	super(arg0);
+	private final String name = "TreeGrowthConfigItem";
+    public TreeGrowthConfigItem() {
+    	setUnlocalizedName(name);
         maxStackSize = 1;
+        GameRegistry.registerItem(this, name);
         setCreativeTab(CreativeTabs.tabMisc);
-        setUnlocalizedName("TreeGrowthConfigItem");
+    }
+    
+    public String getName() {
+     	return name;
     }
     @Override
     public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)

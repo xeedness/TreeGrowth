@@ -1,21 +1,20 @@
 package com.algorim.treegrowth.treedetection;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
+
+import org.apache.logging.log4j.Level;
+
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.common.FMLLog;
 
 import com.algorim.treegrowth.config.Constants;
-import com.algorim.treegrowth.items.TreeGrowthConfigItem;
 import com.algorim.treegrowth.manager.GrowthDataProvider;
 import com.algorim.treegrowth.utilities.Common;
-import com.algorim.treegrowth.utilities.Coord2i;
 import com.algorim.treegrowth.utilities.Timer;
 import com.algorim.treegrowth.utilities.Tree;
 import com.algorim.treegrowth.utilities.TreeData;
-
-import cpw.mods.fml.common.FMLLog;
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 /**
  * This class is supposed to find trees in a chunk. 
@@ -58,7 +57,7 @@ public class TreeDetector {
 			for(int zI=0; zI<16; zI++) {
 				int x = (chunk.xPosition << 4)+xI;
 				int z = (chunk.zPosition << 4)+zI;
-				int y = chunk.getHeightValue(xI, zI);
+				int y = chunk.getHeight(xI, zI);
 				int depth = 0;
 				boolean abort;
 				
@@ -71,7 +70,7 @@ public class TreeDetector {
 							if(stencil.topFits(chunk, x, y-depth, z)) {
 								Tree tree = new Tree(chunk, stencil, x, y-depth, z);
 								stencil.inflate(chunk, tree);
-								if(stencil.bottomFits(chunk, tree.c1.x, tree.c1.y, tree.c1.z) && stencil.trunkFits(chunk, tree)) {
+								if(stencil.bottomFits(chunk, tree.c1.getX(), tree.c1.getY(), tree.c1.getZ()) && stencil.trunkFits(chunk, tree)) {
 									//Check if the list already contains the tree. Add otherwise
 									if(!trees.contains(tree)) trees.add(tree);
 									
@@ -100,7 +99,7 @@ public class TreeDetector {
 	 */
 	public void applyStencils(World world, int x, int y, int z) {
 		if(!world.isRemote) { 
-			Chunk chunk = world.getChunkFromBlockCoords(x, z);
+			Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x,0, z));
 			int depth = 0;
 			
 			outerloop:
@@ -112,13 +111,13 @@ public class TreeDetector {
 						if(stencil.topFits(chunk, x, y-depth, z)) {
 							Tree tree = new Tree(chunk, stencil, x, y-depth, z);
 							stencil.inflate(chunk, tree);
-							if(stencil.bottomFits(chunk, tree.c1.x, tree.c1.y, tree.c1.z) && stencil.trunkFits(chunk, tree)) {
+							if(stencil.bottomFits(chunk, tree.c1.getX(), tree.c1.getY(), tree.c1.getZ()) && stencil.trunkFits(chunk, tree)) {
 								FMLLog.log(Level.INFO, "TreeGrowth tree structure: "+tree);
 								TreeData treeData = GrowthDataProvider.getInstance().getTreeData(chunk,tree);
 								if(treeData == null) {
 									FMLLog.log(Level.INFO, "TreeGrowth found tree structure. "+
-								"wood: ("+Common.getBlockIDAbs(chunk, tree.c1.x, tree.c1.y, tree.c1.z)+":"+Common.getBlockMetadataAbs(chunk, tree.c1.x, tree.c1.y, tree.c1.z)+"),"+
-								"leaves: ("+Common.getBlockIDAbs(chunk, tree.c2.x, tree.c2.y+1, tree.c2.z)+":"+Common.getBlockMetadataAbs(chunk, tree.c2.x, tree.c2.y+1, tree.c2.z)+")");
+								"wood: ("+Common.getBlockIDAbs(chunk, tree.c1.getX(), tree.c1.getY(), tree.c1.getZ())+":"+Common.getBlockMetadataAbs(chunk, tree.c1.getX(), tree.c1.getY(), tree.c1.getZ())+"),"+
+								"leaves: ("+Common.getBlockIDAbs(chunk, tree.c2.getX(), tree.c2.getY()+1, tree.c2.getZ())+":"+Common.getBlockMetadataAbs(chunk, tree.c2.getX(), tree.c2.getY()+1, tree.c2.getZ())+")");
 								} else {
 									FMLLog.log(Level.INFO, "TreeGrowth identified tree. "+treeData);
 								}

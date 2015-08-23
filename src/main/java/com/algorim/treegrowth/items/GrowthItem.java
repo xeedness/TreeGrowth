@@ -1,12 +1,15 @@
 package com.algorim.treegrowth.items;
 
-import com.algorim.treegrowth.TreeGrowth;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import com.algorim.treegrowth.TreeGrowth;
 
 /**
  * Item that processes a chunk, when used.
@@ -15,21 +18,24 @@ import net.minecraft.world.World;
  *
  */
 public class GrowthItem extends Item {
-
-        public GrowthItem(int arg0) {
-        	super(arg0);
+		private final String name = "growthItem";
+        public GrowthItem() {
+        	setUnlocalizedName(name);
+        	GameRegistry.registerItem(this, name);
             maxStackSize = 1;
             setCreativeTab(CreativeTabs.tabMisc);
-            setUnlocalizedName("growthItem");
-            setTextureName("treegrowth:growthitem");
         }
+
         
+        public String getName() {
+        	return name;
+        }
         @Override
-        public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-        	
-        	TreeGrowth.proxy.processChunkAtWorldCoords(par3World,
-        			par2EntityPlayer.getPlayerCoordinates().posX,
-        			par2EntityPlayer.getPlayerCoordinates().posZ);
+        public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {       	
+        	//TODO Check if this works
+        	TreeGrowth.proxy.processChunkAtWorldCoords(worldIn,
+        			playerIn.getPosition().getX(),
+        			playerIn.getPosition().getZ());
         	
         	return true;
         }

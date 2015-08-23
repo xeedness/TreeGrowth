@@ -4,6 +4,8 @@ import com.algorim.treegrowth.config.Constants;
 import com.algorim.treegrowth.treedetection.ITreeStencil;
 import com.algorim.treegrowth.treedetection.TreeDetector;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3i;
 import net.minecraft.world.chunk.Chunk;
 
 /**
@@ -13,13 +15,13 @@ import net.minecraft.world.chunk.Chunk;
  *
  */
 public class Tree {
-	public Coord3i c1, c2;
+	public BlockPos c1, c2;
 	private Chunk chunk;
 	private ITreeStencil stencil;
 	
 	public Tree(Chunk chunk, ITreeStencil stencil, int x1, int y1, int z1, int x2, int y2, int z2) {
-		c1 = new Coord3i(x1,y1,z1);
-		c2 = new Coord3i(x2,y2,z2);
+		c1 = new BlockPos(x1,y1,z1);
+		c2 = new BlockPos(x2,y2,z2);
 		this.chunk = chunk;
 	}
 	
@@ -31,14 +33,14 @@ public class Tree {
 	 * Optains the lower south west coordinate.
 	 * @return 
 	 */
-	public Coord3i getPosition() {
+	public BlockPos getPosition() {
 		return getCoord1();
 	}
 	
-	public Coord3i getDimension() {
-		return new Coord3i(Math.abs(c2.x-c1.x),
-				Math.abs(c2.y-c1.y),
-				Math.abs(c2.z-c1.z));
+	public Vec3i getDimension() {	
+		return 	new Vec3i(Math.abs(c2.getX()-c1.getX()),
+				Math.abs(c2.getY()-c1.getY()),
+				Math.abs(c2.getZ()-c1.getZ()));
 	}
 	
 	/**
@@ -46,7 +48,7 @@ public class Tree {
 	 * @return
 	 */
 	public int getSize() {
-		return Math.max(Math.abs(c2.x-c1.x), Math.abs(c2.z-c1.z))+1;
+		return Math.max(Math.abs(c2.getX()-c1.getX()), Math.abs(c2.getZ()-c1.getZ()))+1;
 	}
 	
 	/**
@@ -57,22 +59,22 @@ public class Tree {
 	 * @return
 	 */
 	public boolean validate() {
-		return 	c2.x-c1.x >= 0 &&
-				c2.x-c1.x == c2.z-c1.z && 
-				c2.y-c1.y >= Constants.MIN_TREE_HEIGHT;
+		return 	c2.getX()-c1.getX() >= 0 &&
+				c2.getX()-c1.getX() == c2.getZ()-c1.getZ() && 
+				c2.getY()-c1.getY() >= Constants.MIN_TREE_HEIGHT;
 	}
 	
-	public Coord3i getCoord1() {
+	public BlockPos getCoord1() {
 		return c1;
 	}
-	public Coord3i getCoord2() {
+	public BlockPos getCoord2() {
 		return c2;
 	}
-	public void setCoord1(Coord3i c) {
-		c1 = new Coord3i(c);
+	public void setCoord1(BlockPos c) {
+		c1 = new BlockPos(c);
 	}
-	public void setCoord2(Coord3i c) {
-		c2 = new Coord3i(c);
+	public void setCoord2(BlockPos c) {
+		c2 = new BlockPos(c);
 	}
 	
 	@Override
@@ -86,9 +88,9 @@ public class Tree {
 	}
 	
 	public String toString() {
-		Coord3i ac1 = getCoord1();
-		Coord3i ac2 = getCoord2();
-		return ac1.x+":"+ac1.y+":"+ac1.z+" "+ac2.x+":"+ac2.y+":"+ac2.z;
+		BlockPos ac1 = getCoord1();
+		BlockPos ac2 = getCoord2();
+		return ac1.getX()+":"+ac1.getY()+":"+ac1.getZ()+" "+ac2.getX()+":"+ac2.getY()+":"+ac2.getZ();
 	}
 	
 	/**

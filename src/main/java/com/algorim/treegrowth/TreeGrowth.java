@@ -1,23 +1,16 @@
 package com.algorim.treegrowth;
 
-import java.util.ArrayList;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.algorim.treegrowth.events.TickHandler;
-import com.algorim.treegrowth.items.GrowthItem;
-import com.algorim.treegrowth.items.TreeGrowthConfigItem;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = TreeGrowth.MODID, version = TreeGrowth.VERSION)
 public class TreeGrowth
@@ -56,6 +49,8 @@ public class TreeGrowth
     public void init(FMLInitializationEvent event)
     {
     	proxy.init(event);
-    	TickRegistry.registerTickHandler(new TickHandler(), Side.SERVER);		
+    	//TODO Check if this works
+    	FMLCommonHandler.instance().bus().register(new TickHandler());
+    	//TickRegistry.registerTickHandler(, Side.SERVER);		
     }
 }

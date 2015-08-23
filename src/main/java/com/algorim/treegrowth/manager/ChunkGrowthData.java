@@ -1,12 +1,8 @@
 package com.algorim.treegrowth.manager;
 
-import java.util.ListIterator;
-import java.util.TreeMap;
+import net.minecraft.world.chunk.Chunk;
 
 import com.algorim.treegrowth.config.Constants;
-
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 /**
  * This class provides info of the processing history of a chunk
@@ -30,7 +26,7 @@ public class ChunkGrowthData {
 	public boolean needsProcessing() {
 		//if(true) return false;
 		if(chunk == null) return false;
-		long total = chunk.worldObj.getTotalWorldTime();
+		long total = chunk.getWorld().getTotalWorldTime();
 //		System.out.println("NeedsProcessing called: "
 //				+ total
 //				+ " - "+last_processed
@@ -48,7 +44,7 @@ public class ChunkGrowthData {
 	 */
 	public void updateProcessing() {
 		processed++;
-		last_processed = chunk.worldObj.getTotalWorldTime();
+		last_processed = chunk.getWorld().getTotalWorldTime();
 	}
 	
 	public void remove() {

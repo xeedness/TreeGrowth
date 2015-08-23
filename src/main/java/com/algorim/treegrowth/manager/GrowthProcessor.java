@@ -2,26 +2,31 @@ package com.algorim.treegrowth.manager;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
+
+
+
+
+
+
+
+
+import org.apache.logging.log4j.Level;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.common.FMLLog;
 
 import com.algorim.treegrowth.config.Constants;
 import com.algorim.treegrowth.treedetection.TreeDetector;
 import com.algorim.treegrowth.utilities.Common;
-import com.algorim.treegrowth.utilities.Coord3i;
 import com.algorim.treegrowth.utilities.Tree;
 import com.algorim.treegrowth.utilities.TreeData;
-
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockSapling;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.BonemealEvent;
 
 /**
  * Main processing class. It it used, when a chunk needs to be processed.
@@ -59,7 +64,7 @@ public class GrowthProcessor {
 	 * @return
 	 */
 	public boolean processChunk(Chunk chunk) {
-		
+		if(chunk.getWorld().isRemote) return true;
 		//System.out.println("Processing Chunk: "+chunk.xPosition+" "+chunk.zPosition);
 		ArrayList<Tree> trees = TreeDetector.getInstance().findTrees(chunk);
 		for(Tree tree : trees) {
@@ -103,7 +108,7 @@ public class GrowthProcessor {
 				treeProcessor.process();
 
 				TreeData treeData = mGrowthDataProvider.getTreeData(chunk,tree);
-				if(treeData != null && !chunk.worldObj.isRemote) {
+				if(treeData != null && !chunk.getWorld().isRemote) {
 					if(treeProcessor.getHeighestRating() < Constants.RATING_THRESHOLD) {
 						//System.out.println("Skipped tree due to heighestRating: "+treeProcessor.getHeighestRating());
 						continue;
@@ -114,11 +119,18 @@ public class GrowthProcessor {
 					}
 					
 					int i = new Random().nextInt(treeProcessor.getCandidates().size());
-					Coord3i c = treeProcessor.getCandidates().get(i);
-					ItemStack sap = treeData.getSapling();
+					BlockPos c = treeProcessor.getCandidates().get(i);
+					IBlockState sap = treeData.getSapling();
 					float f = new Random().nextFloat();
 					if(f < treeData.getFertility()) { 
-						chunk.worldObj.setBlock(c.x, c.y, c.z, sap.itemID, sap.getItemDamage(), 2);
+						World world = chunk.getWorld();
+						Block test;
+						BlockPos pos = new BlockPos(c);
+						
+						chunk.getWorld().setBlockState(pos, sap);
+						FMLLog.log(Level.INFO,"Spawned new sapling");
+						//chunk.getWorld().setBlockState
+						//chunk.getWorld().setBlock(c.x, c.y, c.z, sap.itemId, sap.getItemDamage(), 2);
 						//((BlockSapling)Block.sapling).growTree(chunk.worldObj, c.x, c.y, c.z, chunk.worldObj.rand);
 						//System.out.println("Spawned new Tree.");
 					}

@@ -50,11 +50,11 @@ public class StandardTreeStencil implements ITreeStencil {
 	@Override
 	public boolean trunkFits(Chunk chunk, Tree tree) {
 		boolean fits = false;
-		int x = tree.c1.x;
-		int z = tree.c1.z;
+		int x = tree.c1.getX();
+		int z = tree.c1.getZ();
 		//Negative condition. If the trunk has nowhere the size 1, it is no standard trunk.
 		//TODO Need positive condition?
-		for(int y = tree.c1.y; y <= tree.c2.y-2; y++) {
+		for(int y = tree.c1.getY(); y <= tree.c2.getY()-2; y++) {
 			
 			if(	!Common.isWoodLog(chunk, x+1, y, z) &&
 				!Common.isWoodLog(chunk, x, y, z+1) && 
@@ -68,7 +68,7 @@ public class StandardTreeStencil implements ITreeStencil {
 		}
 		
 		//Dimensions
-		if((tree.c2.y - tree.c1.y)+1 < Constants.MIN_TREE_HEIGHT) fits = false;
+		if((tree.c2.getY() - tree.c1.getY())+1 < Constants.MIN_TREE_HEIGHT) fits = false;
 		
 		return fits;
 	}
@@ -76,12 +76,13 @@ public class StandardTreeStencil implements ITreeStencil {
 	
 	@Override
 	public boolean inflate(Chunk chunk, Tree tree) {
-		if(!Common.isWoodLog(chunk, tree.c2.x, tree.c2.y, tree.c2.z)) return false;
+		if(!Common.isWoodLog(chunk, tree.c2.getX(), tree.c2.getY(), tree.c2.getZ())) return false;
 		
-		while(Common.isWoodLog(chunk, tree.c1.x, tree.c1.y, tree.c1.z)) {
-			tree.c1.y--;
+		while(Common.isWoodLog(chunk, tree.c1.getX(), tree.c1.getY(), tree.c1.getZ())) {
+			tree.c1 = tree.c1.add(0,-1,0);
+			
 		}
-		tree.c1.y++;
+		tree.c1 = tree.c1.add(0,1,0);
 		
 		return true;
 	}

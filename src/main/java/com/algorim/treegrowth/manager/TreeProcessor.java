@@ -5,14 +5,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import com.algorim.treegrowth.utilities.Common;
-import com.algorim.treegrowth.utilities.Coord2i;
-import com.algorim.treegrowth.utilities.Coord3i;
-import com.algorim.treegrowth.utilities.Tree;
-
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
+import com.algorim.treegrowth.utilities.Common;
+import com.algorim.treegrowth.utilities.Coord2i;
+import com.algorim.treegrowth.utilities.Tree;
 
 /**
  * This class processes an already detected tree. 
@@ -38,9 +38,11 @@ public class TreeProcessor {
 	private int[][] mGroundRating;
 	private int[][] mGroundBlockID;
 	private boolean[][] mValidPlace;
-	private Coord2i start;
-	private Coord2i end;
-	private ArrayList<Coord3i> candidates; 
+	private int startX;
+	private int startZ;
+	private int endX;
+	private int endZ;
+	private ArrayList<BlockPos> candidates; 
 	
 	private int cFertile;
 	private int cArid;
@@ -48,12 +50,12 @@ public class TreeProcessor {
 	TreeProcessor(Chunk chunk, Tree tree) {
 		mChunk = chunk;
 		mTree = tree;
-		mWorld = chunk.worldObj;
+		mWorld = chunk.getWorld();
 		
-		start = new Coord2i(tree.c1.x-(tree.getGrowthDimension()-tree.getSize())/2,
-				tree.c1.z-(tree.getGrowthDimension()-tree.getSize())/2);
-		end = new Coord2i(tree.c2.x+(tree.getGrowthDimension()-tree.getSize())/2,
-				tree.c2.z+(tree.getGrowthDimension()-tree.getSize())/2);
+		startX = tree.c1.getX()-(tree.getGrowthDimension()-tree.getSize())/2;
+		startZ = tree.c1.getZ()-(tree.getGrowthDimension()-tree.getSize())/2;
+		endX = tree.c2.getX()+(tree.getGrowthDimension()-tree.getSize())/2;
+		endZ = tree.c2.getZ()+(tree.getGrowthDimension()-tree.getSize())/2;
 		
 		mGroundHeight = new int[tree.getGrowthDimension()+RATING_RADIUS*2][tree.getGrowthDimension()+RATING_RADIUS*2];
 		mGroundType = new int[tree.getGrowthDimension()+RATING_RADIUS*2][tree.getGrowthDimension()+RATING_RADIUS*2];
@@ -61,7 +63,7 @@ public class TreeProcessor {
 		mValidPlace = new boolean[tree.getGrowthDimension()+RATING_RADIUS*2][tree.getGrowthDimension()+RATING_RADIUS*2];
 		mGroundRating = new int[tree.getGrowthDimension()][tree.getGrowthDimension()];
 		
-		candidates = new ArrayList<Coord3i>();
+		candidates = new ArrayList<BlockPos>();
 //		System.out.println("TreeProcessorInit:");
 //		System.out.println("start: "+start.x+" "+start.y);
 //		System.out.println("end: "+end.x+" "+end.y);
@@ -80,18 +82,18 @@ public class TreeProcessor {
 		cArid = 0;
 		heighestRating = 0;
 		for(int x=0; x<mGroundRating.length; x++) {
-			for(int y=0; y<mGroundRating[x].length; y++) {
-				if(mGroundType[x+RATING_RADIUS][y+RATING_RADIUS] == TYPE_FERTILE) cFertile++;
-				if(mGroundType[x+RATING_RADIUS][y+RATING_RADIUS] == TYPE_ARID) cArid++;
-				mGroundRating[x][y] = getRating(x,y);
-				heighestRating = Math.max(heighestRating, mGroundRating[x][y]);
+			for(int z=0; z<mGroundRating[x].length; z++) {
+				if(mGroundType[x+RATING_RADIUS][z+RATING_RADIUS] == TYPE_FERTILE) cFertile++;
+				if(mGroundType[x+RATING_RADIUS][z+RATING_RADIUS] == TYPE_ARID) cArid++;
+				mGroundRating[x][z] = getRating(x,z);
+				heighestRating = Math.max(heighestRating, mGroundRating[x][z]);
 			}
 		}
 		
 		for(int x=0; x<mGroundRating.length; x++) {
-			for(int y=0; y<mGroundRating[x].length; y++) {
+			for(int z=0; z<mGroundRating[x].length; z++) {
 				
-				if(mGroundRating[x][y] == heighestRating) candidates.add(new Coord3i(start.x+x, mGroundHeight[RATING_RADIUS+x][RATING_RADIUS+y]+1, start.y+y));
+				if(mGroundRating[x][z] == heighestRating) candidates.add(new BlockPos(startX+x, mGroundHeight[RATING_RADIUS+x][RATING_RADIUS+z]+1, startZ+z));
 			}
 		}
 		
@@ -141,7 +143,7 @@ public class TreeProcessor {
 	 * Gets the sapling candidates
 	 * @return
 	 */
-	public ArrayList<Coord3i> getCandidates() {
+	public ArrayList<BlockPos> getCandidates() {
 		return candidates;
 	}
 	/**
@@ -171,20 +173,22 @@ public class TreeProcessor {
 	 * Fills the arrays with informations.
 	 */
 	private void generateArrays() {
-		for(int x = start.x-RATING_RADIUS; x<= end.x+RATING_RADIUS;x++) {
-			for(int z = start.y-RATING_RADIUS; z<= end.y+RATING_RADIUS;z++) {
-				int height = mWorld.getHeightValue(x,z)-1;
-				mGroundHeight[x-(start.x-RATING_RADIUS)][z-(start.y-RATING_RADIUS)] = height;
-				mGroundBlockID[x-(start.x-RATING_RADIUS)][z-(start.y-RATING_RADIUS)] = mWorld.getBlockId(x, height, z);
-				mValidPlace[x-(start.x-RATING_RADIUS)][z-(start.y-RATING_RADIUS)] = Common.isClear(mWorld.getBlockId(x, height+1, z));
+		for(int x = startX-RATING_RADIUS; x<= endX+RATING_RADIUS;x++) {
+			for(int z = startZ-RATING_RADIUS; z<= endZ+RATING_RADIUS;z++) {
+				//int height = mWorld.getHeight()-1;
+				int height = mWorld.getChunkFromChunkCoords(x >> 4, z >> 4).getHeight(x & 15, z & 15)-1;
+				
+				mGroundHeight[x-(startX-RATING_RADIUS)][z-(startZ-RATING_RADIUS)] = height;
+				mGroundBlockID[x-(startX-RATING_RADIUS)][z-(startZ-RATING_RADIUS)] = Common.getBlockID(mWorld, x, height, z);
+				mValidPlace[x-(startX-RATING_RADIUS)][z-(startZ-RATING_RADIUS)] = Common.isClear(Common.getBlockID(mWorld, x, height+1, z));
 				if(Common.isTreePart(mWorld, x, height, z)) {
-					mGroundType[x-(start.x-RATING_RADIUS)][z-(start.y-RATING_RADIUS)] = TYPE_OCCUPIED;
+					mGroundType[x-(startX-RATING_RADIUS)][z-(startZ-RATING_RADIUS)] = TYPE_OCCUPIED;
 				} else if(Common.isFertile(mWorld, x, height, z)) {
-					mGroundType[x-(start.x-RATING_RADIUS)][z-(start.y-RATING_RADIUS)] = TYPE_FERTILE;
+					mGroundType[x-(startX-RATING_RADIUS)][z-(startZ-RATING_RADIUS)] = TYPE_FERTILE;
 				} else {
-					mGroundType[x-(start.x-RATING_RADIUS)][z-(start.y-RATING_RADIUS)] = TYPE_ARID;
+					mGroundType[x-(startX-RATING_RADIUS)][z-(startZ-RATING_RADIUS)] = TYPE_ARID;
 				}
-				mValidPlace[x-(start.x-RATING_RADIUS)][z-(start.y-RATING_RADIUS)] = Common.isClear(mWorld.getBlockId(x, height+1, z)) && mGroundType[x-(start.x-RATING_RADIUS)][z-(start.y-RATING_RADIUS)] == TYPE_FERTILE;
+				mValidPlace[x-(startX-RATING_RADIUS)][z-(startZ-RATING_RADIUS)] = Common.isClear(Common.getBlockID(mWorld,x, height+1, z)) && mGroundType[x-(startX-RATING_RADIUS)][z-(startZ-RATING_RADIUS)] == TYPE_FERTILE;
 			}
 		}
 	}
